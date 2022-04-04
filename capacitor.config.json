@@ -1,0 +1,6 @@
+{
+  "appId": "com.hexbattler.app",
+  "appName": "Hex Battler",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
