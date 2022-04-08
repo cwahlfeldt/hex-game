@@ -1,6 +1,6 @@
 import {roundCubeCoords, deepEqual, throwError} from './utilities.js'
 
-const {sqrt, abs} = Math;
+const {PI, sqrt, abs, cos, sin} = Math;
 
 // using only flat top orientation
 export const ORIENTATION = {
@@ -70,10 +70,7 @@ export function createPoint(x, y) {
 }
 
 export function createLayout(size, origin) {
-    return {
-        size,
-        origin,
-    }
+    return {size, origin}
 }
 
 export function convertHexToPixel(layout, hex) {
@@ -97,4 +94,20 @@ export function convertPixelToHex(layout, point) {
         roundedHexCoords.r,
         roundedHexCoords.s
     )
+}
+
+export function getCornerOffset(layout, corner) {
+    const size = layout.size
+    const angle = 2.0 * PI * (ORIENTATION.startAngle + corner) / 6
+    return createPoint(size.x * cos(angle), size.y * sin(angle))
+}
+
+export function createHexCorners(layout, hex) {
+    const corners = []
+    const center = convertHexToPixel(layout, hex)
+    for (let i = 0; i <= 6; i++) {
+        const offset = getCornerOffset(layout, i)
+        corners.push(createPoint(center.x + offset.x, center.y + offset.y))
+    }
+    return corners
 }

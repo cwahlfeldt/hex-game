@@ -11,7 +11,7 @@ import {
     hexagonNeighbor,
     createPoint,
     createLayout,
-    convertHexToPixel, convertPixelToHex,
+    convertHexToPixel, convertPixelToHex, getCornerOffset, createHexCorners,
 } from '../modules/hexagons.js'
 
 const hexA = createHexagon(0, 1, -1)
@@ -119,6 +119,16 @@ test(`convert pixels to hexagon`, t => {
     )
 })
 
+test(`get the corner offset of a hexagon`, t => {
+    const size = createPoint(10, 10)
+    const origin = createPoint(0, 0)
+    const layout = createLayout(size, origin)
+    t.deepEqual(
+        getCornerOffset(layout, 4),
+        createPoint(-5.000000000000004, -8.660254037844386)
+    )
+})
+
 test(`create hexagon corner points`, t => {
     const size = createPoint(10, 10)
     const origin = createPoint(0, 0)
@@ -127,12 +137,12 @@ test(`create hexagon corner points`, t => {
     t.deepEqual(
         createHexCorners(layout, hex),
         [
-            createPoint(0, 1),
-            createPoint(1, 1),
-            createPoint(-1, -1),
-            createPoint(-1, 0),
-            createPoint(0, -1),
-            createPoint(1, 0),
+            createPoint(70, 34.64101615137754),
+            createPoint(65, 43.301270189221924),
+            createPoint(55, 43.30127018922193),
+            createPoint(50, 34.64101615137754),
+            createPoint(54.99999999999999, 25.980762113533157),
+            createPoint(65, 25.980762113533157),
         ]
     )
 })
