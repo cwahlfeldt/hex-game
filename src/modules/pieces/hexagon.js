@@ -3,11 +3,10 @@ import {
     getAllNeighbors,
     hexagon,
     hexCorners,
+    hexShapedMap,
     layout,
     point
 } from "../lib/hexagons.js";
-
-const {min, max} = Math
 
 export function hexagonPiece(optionArgs) {
     const options = {
@@ -31,18 +30,6 @@ export function hexagonPiece(optionArgs) {
         neighbors: getAllNeighbors(hex),
         isTraversable: options.isTraversable,
     }
-}
-
-export function hexShapedMap(radius) {
-    let map = []
-    for (let q = -radius; q <= radius; q++) {
-        let r1 = max(-radius, -q - radius);
-        let r2 = min(radius, -q + radius);
-        for (let r = r1; r <= r2; r++) {
-            map.push(hexagonPiece({hex: hexagon(q, r, -q-r)}));
-        }
-    }
-    return map
 }
 
 export function drawHexagon(ctx, hex) {

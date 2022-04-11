@@ -1,6 +1,7 @@
-import {roundCubeCoords, deepEqual, throwError} from './utilities.js'
+import {roundCubeCoords, deepEqual, throwError, lerp} from './utilities.js'
+import {hexagonPiece} from "../pieces/hexagon.js";
 
-const {PI, sqrt, abs, cos, sin} = Math;
+const {PI, sqrt, abs, cos, sin, min, max} = Math;
 
 // using only flat top orientation
 export const ORIENTATION = {
@@ -116,4 +117,25 @@ export function hexCorners(layout, hex) {
         corners.push(point(center.x + offset.x, center.y + offset.y))
     }
     return corners
+}
+
+export function hexLerp(a, b, t) {
+    const {q, r, s} = roundCubeCoords(
+        lerp(a.q, b.q, t),
+        lerp(a.r, b.r, t),
+        lerp(a.s, b.s, t)
+    )
+    return hexagon(q, r, s)
+}
+
+export function hexShapedMap(radius) {
+    let map = []
+    for (let q = -radius; q <= radius; q++) {
+        let r1 = max(-radius, -q - radius);
+        let r2 = min(radius, -q + radius);
+        for (let r = r1; r <= r2; r++) {
+            map.push(hexagonPiece({hex: hexagon(q, r, -q-r)}));
+        }
+    }
+    return map
 }
