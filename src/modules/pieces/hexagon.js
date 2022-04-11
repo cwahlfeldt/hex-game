@@ -7,6 +7,8 @@ import {
     point
 } from "../lib/hexagons.js";
 
+const {min, max} = Math
+
 export function hexagonPiece(optionArgs) {
     const options = {
         hex: hexagon(0, 0, 0),
@@ -31,14 +33,33 @@ export function hexagonPiece(optionArgs) {
     }
 }
 
-export function drawHexagon(ctx, hex) {
-    const hexPiece = hexagonPiece({hex})
+export function hexShapedMap(radius) {
+    let map = []
+    for (let q = -radius; q <= radius; q++) {
+        let r1 = max(-radius, -q - radius);
+        let r2 = min(radius, -q + radius);
+        for (let r = r1; r <= r2; r++) {
+            map.push(hexagonPiece({hex: hexagon(q, r, -q-r)}));
+        }
+    }
+    return map
+}
 
+export function drawHexagon(ctx, hex) {
+    const {corners} = hexagonPiece({hex})
     ctx.beginPath();
-    ctx.moveTo(0, 0)
-    hexPiece.corners.forEach(corner => {
+    corners.forEach(corner => {
         ctx.lineTo(corner.x, corner.y)
     })
-    ctx.closePath()
+    ctx.lineTo(corners[0].x, corners[0].y)
+    ctx.stroke()
     ctx.fill()
+    ctx.closePath()
+}
+
+export function drawMap(ctx) {
+    const map = hexShapedMap(6)
+    map.forEach(item => {
+        drawHexagon(ctx, item.hex)
+    })
 }

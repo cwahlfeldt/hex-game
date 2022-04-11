@@ -111,7 +111,7 @@ export function getCornerOffset(layout, corner) {
 export function hexCorners(layout, hex) {
     const corners = []
     const center = convertHexToPixel(layout, hex)
-    for (let i = 0; i <= 6; i++) {
+    for (let i = 0; i < 6; i++) {
         const offset = getCornerOffset(layout, i)
         corners.push(point(center.x + offset.x, center.y + offset.y))
     }
