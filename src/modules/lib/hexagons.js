@@ -10,15 +10,15 @@ export const ORIENTATION = {
 }
 
 export const DIRECTIONS = {
-    upLeft:    createHexagon(-1, 0, 1),
-    up:        createHexagon(0, -1, 1),
-    upRight:   createHexagon(1, -1, 0),
-    downLeft:  createHexagon(-1, 1, 0),
-    down:      createHexagon(0, 1, -1),
-    downRight: createHexagon(-1, 1, 0),
+    upLeft:    hexagon(-1, 0, 1),
+    up:        hexagon(0, -1, 1),
+    upRight:   hexagon(1, -1, 0),
+    downLeft:  hexagon(-1, 1, 0),
+    down:      hexagon(0, 1, -1),
+    downRight: hexagon(-1, 1, 0),
 }
 
-export function createHexagon(q, r, s) {
+export function hexagon(q, r, s) {
     if (q + r + s !== 0)
         throwError('q + r + s must equal 0')
 
@@ -30,7 +30,7 @@ export function areHexagonsEqual(hexA, hexB) {
 }
 
 export function addHexagons(hexA, hexB)  {
-    return createHexagon(
+    return hexagon(
         hexA.q + hexB.q,
         hexA.r + hexB.r,
         hexA.s + hexB.s
@@ -38,7 +38,7 @@ export function addHexagons(hexA, hexB)  {
 }
 
 export function subtractHexagons(hexA, hexB)  {
-    return createHexagon(
+    return hexagon(
         hexA.q - hexB.q,
         hexA.r - hexB.r,
         hexA.s - hexB.s
@@ -46,7 +46,7 @@ export function subtractHexagons(hexA, hexB)  {
 }
 
 export function multiplyHexagons(hex, multiplyBy)  {
-    return createHexagon(
+    return hexagon(
         hex.q * multiplyBy,
         hex.r * multiplyBy,
         hex.s * multiplyBy
@@ -65,11 +65,17 @@ export function hexagonNeighbor(hex, direction) {
     return addHexagons(hex, direction)
 }
 
-export function createPoint(x, y) {
+export function getAllNeighbors(hex) {
+    return Object.keys(DIRECTIONS).map(key => {
+        return hexagonNeighbor(hex, DIRECTIONS[key])
+    })
+}
+
+export function point(x, y) {
     return {x, y}
 }
 
-export function createLayout(size, origin) {
+export function layout(size, origin) {
     return {size, origin}
 }
 
@@ -77,19 +83,19 @@ export function convertHexToPixel(layout, hex) {
     const M = ORIENTATION
     const x = ((M.f0 * hex.q) + (M.f1 * hex.r)) * layout.size.x
     const y = ((M.f2 * hex.q) + (M.f3 * hex.r)) * layout.size.y
-    return createPoint(x + layout.origin.x, y + layout.origin.y)
+    return point(x + layout.origin.x, y + layout.origin.y)
 }
 
-export function convertPixelToHex(layout, point) {
+export function convertPixelToHex(layout, pixelPoint) {
     const M = ORIENTATION
-    const pt = createPoint(
-        (point.x - layout.origin.x) / layout.size.x,
-        (point.y - layout.origin.y) / layout.size.y,
+    const pt = point(
+        (pixelPoint.x - layout.origin.x) / layout.size.x,
+        (pixelPoint.y - layout.origin.y) / layout.size.y,
     )
     const q = M.b0 * pt.x + M.b1 * pt.y;
     const r = M.b2 * pt.x + M.b3 * pt.y;
     const roundedHexCoords = roundCubeCoords(q, r, -q - r)
-    return createHexagon(
+    return hexagon(
         roundedHexCoords.q,
         roundedHexCoords.r,
         roundedHexCoords.s
@@ -99,15 +105,15 @@ export function convertPixelToHex(layout, point) {
 export function getCornerOffset(layout, corner) {
     const size = layout.size
     const angle = 2.0 * PI * (ORIENTATION.startAngle + corner) / 6
-    return createPoint(size.x * cos(angle), size.y * sin(angle))
+    return point(size.x * cos(angle), size.y * sin(angle))
 }
 
-export function createHexCorners(layout, hex) {
+export function hexCorners(layout, hex) {
     const corners = []
     const center = convertHexToPixel(layout, hex)
     for (let i = 0; i <= 6; i++) {
         const offset = getCornerOffset(layout, i)
-        corners.push(createPoint(center.x + offset.x, center.y + offset.y))
+        corners.push(point(center.x + offset.x, center.y + offset.y))
     }
     return corners
 }
