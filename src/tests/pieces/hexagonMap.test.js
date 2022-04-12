@@ -8,10 +8,10 @@ import {
     layout,
     point
 } from "../../modules/lib/hexagons.js";
-import {hexagonPiece} from "../../modules/pieces/hexagon.js";
+import {hexagonPiece} from "../../modules/pieces/hexagonMap.js";
 
 const hex = hexagon(6, -5, -1)
-const size = point(20, 20)
+const size = point(32, 32)
 const hexLayout = layout(size, point(0, 0))
 
 const expectedHexagonPiece = {

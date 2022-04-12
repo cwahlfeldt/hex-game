@@ -1,5 +1,5 @@
 import {roundCubeCoords, deepEqual, throwError, lerp} from './utilities.js'
-import {hexagonPiece} from "../pieces/hexagon.js";
+import {hexagonPiece} from "../pieces/hexagonMap.js";
 
 const {PI, sqrt, abs, cos, sin, min, max} = Math;
 
@@ -23,6 +23,10 @@ export function hexagon(q, r, s) {
     if (q + r + s !== 0)
         throwError('q + r + s must equal 0')
 
+    return {q, r, s}
+}
+
+export function fracHexagon(q, r, s) {
     return {q, r, s}
 }
 
@@ -77,7 +81,10 @@ export function point(x, y) {
 }
 
 export function layout(size, origin) {
-    return {size, origin}
+    return {
+        size: point(size.x, size.y),
+        origin: point(origin.x, origin.y)
+    }
 }
 
 export function convertHexToPixel(layout, hex) {
@@ -119,23 +126,30 @@ export function hexCorners(layout, hex) {
     return corners
 }
 
-export function hexLerp(a, b, t) {
-    const {q, r, s} = roundCubeCoords(
-        lerp(a.q, b.q, t),
-        lerp(a.r, b.r, t),
-        lerp(a.s, b.s, t)
-    )
+export function roundHex(fracHex) {
+    const {q, r, s} = roundCubeCoords(fracHex.q, fracHex.r, fracHex.s)
     return hexagon(q, r, s)
 }
 
-export function hexShapedMap(radius) {
-    let map = []
-    for (let q = -radius; q <= radius; q++) {
-        let r1 = max(-radius, -q - radius);
-        let r2 = min(radius, -q + radius);
-        for (let r = r1; r <= r2; r++) {
-            map.push(hexagonPiece({hex: hexagon(q, r, -q-r)}));
-        }
-    }
-    return map
+export function hexLerp(a, b, t) {
+    return roundHex(
+        fracHexagon(
+            lerp(a.q, b.q, t),
+            lerp(a.r, b.r, t),
+            lerp(a.s, b.s, t)
+        )
+    )
 }
+
+export function hexLine(hexA, hexB) {
+    const N = distanceBetweenHexagons(hexA, hexB)
+    const step = 1.0 / max(N, 1)
+
+    let results = []
+    for (let i = 0; i <= N; i++) {
+        results.push(hexLerp(hexA, hexB, i * step))
+    }
+
+    return results
+}
+

@@ -14,8 +14,11 @@ import {
     convertHexToPixel,
     convertPixelToHex,
     getCornerOffset,
-    hexCorners, getAllNeighbors,
+    hexCorners,
+    getAllNeighbors, hexLine, fracHexagon, hexLerp,
+
 } from '../modules/lib/hexagons.js'
+import {roundCubeCoords} from "../modules/lib/utilities.js";
 
 const hexA = hexagon(0, 1, -1)
 const hexB = hexagon(-1, 0, 1)
@@ -146,7 +149,6 @@ test(`create hexagon corner points`, t => {
             point(50, 34.64101615137754),
             point(54.99999999999999, 25.980762113533157),
             point(65, 25.980762113533157),
-            point(70, 34.64101615137754),
         ]
     )
 })
@@ -162,6 +164,24 @@ test(`get all hex neighbors`, t => {
             hexagon(5, -5, 0),
             hexagon(6, -5, -1),
             hexagon(5, -5, 0),
+        ]
+    )
+})
+
+test(`lerp a hex`, t => {
+    t.deepEqual(
+        hexLerp(hexA, hexB, 0),
+        hexagon(0, 1, -1)
+    )
+})
+
+test(`create a line from one hex to another`, t => {
+    t.deepEqual(
+        hexLine(hexA, hexB),
+        [
+            hexagon(0,1,-1),
+            hexagon(0,0,0),
+            hexagon(-1,0,1),
         ]
     )
 })

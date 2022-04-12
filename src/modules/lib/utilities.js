@@ -1,4 +1,4 @@
-const { round, abs} = Math;
+const {round, abs} = Math;
 
 export function throwError(msg) {
     console.error(msg)
@@ -29,6 +29,10 @@ export function roundCubeCoords(qq, rr, ss) {
     } else {
         s = -q-r
     }
+
+    if (q === -0) q = 0
+    if (r === -0) r = 0
+    if (s === -0) s = 0
 
     return {q, r, s}
 }
