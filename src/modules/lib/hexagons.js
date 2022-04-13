@@ -18,7 +18,7 @@ export const DIRECTIONS = {
     downRight: hexagon(-1, 1, 0),
 }
 
-export const SIZE = 60
+export const SIZE = 40
 export const ORIGIN = 0
 export const LAYOUT = layout(
     point(SIZE, SIZE),

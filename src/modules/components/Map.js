@@ -11,7 +11,7 @@ function drawHexagon(ctx, hex) {
     ctx.strokeStyle = '#3f3f3f'
     ctx.stroke()
 
-    ctx.fillStyle = 'rgba(42, 160, 216, .2)'
+    ctx.fillStyle = 'rgba(42, 160, 216, 0)'
     if (isTraversable)
         ctx.fillStyle = hex.color
     ctx.fill()
