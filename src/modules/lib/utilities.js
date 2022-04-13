@@ -1,4 +1,4 @@
-const {round, abs} = Math;
+const {round, abs, random} = Math;
 
 export function throwError(msg) {
     console.error(msg)
@@ -39,4 +39,8 @@ export function roundCubeCoords(qq, rr, ss) {
 
 export function lerp(a, b, t) {
     return a * (1-t) + b * t;
+}
+
+export function randNum(min, max) {
+    return round(random() * (max - min) + min);
 }

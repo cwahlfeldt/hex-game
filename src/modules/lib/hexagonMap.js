@@ -1,4 +1,5 @@
 import {convertHexToPixel, convertPixelToHex, getAllNeighbors, hexagon, hexCorners, point} from "./hexagons.js";
+import {randNum} from "./utilities.js";
 
 const {min, max} = Math
 
@@ -41,4 +42,18 @@ export function hexShapedMap(radius) {
     }
 
     return map
+}
+
+export function randomizeTraversableHexes(hexMap, numOfTiles = 6) {
+    const map = hexMap
+    const max = map.length - 1
+    const min = 1
+    Array.from({length: numOfTiles}).forEach(i => {
+        const num = randNum(min, max)
+        const randHex = map[num]
+        console.log(num)
+        randHex.isTraversable = !randHex.isTraversable
+    })
+    return map
+
 }
