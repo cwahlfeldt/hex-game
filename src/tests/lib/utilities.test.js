@@ -1,5 +1,5 @@
 import test from 'ava'
-import {deepEqual} from '../modules/lib/utilities.js'
+import {deepEqual} from '../../modules/lib/utilities.js'
 
 test(`does deep equal util work`, t => {
     t.truthy(deepEqual({x: 1}, {x: 1}))

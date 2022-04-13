@@ -6,7 +6,7 @@ import {
     hexagon,
     hexCorners,
 } from "../../modules/lib/hexagons.js";
-import {hexagonPiece} from "../../modules/lib/hexagonMap.js";
+import {hexagonPiece, hexShapedMap} from "../../modules/lib/hexagonMap.js";
 
 const hex = hexagon(6, -5, -1)
 const expectedHexagonPiece = {
@@ -38,3 +38,19 @@ test(`create a hexagon piece`, t => {
         }
     )
 })
+
+// test(`create a hex shaped map`, t => {
+//     t.deepEqual(
+//         hexShapedMap(0),
+//         [
+//             hexagonPiece({hex: hexagon(0,0,0)}),
+//             hexagonPiece({hex: hexagon(0,0,0)}),
+//             hexagonPiece({hex: hexagon(0,0,0)}),
+//             hexagonPiece({hex: hexagon(0,0,0)}),
+//             hexagonPiece({hex: hexagon(0,0,0)}),
+//             hexagonPiece({hex: hexagon(0,0,0)}),
+//             hexagonPiece({hex: hexagon(0,0,0)}),
+//             hexagonPiece({hex: hexagon(0,0,0)})
+//         ]
+//     )
+// })

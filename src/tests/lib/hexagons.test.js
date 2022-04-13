@@ -19,7 +19,7 @@ import {
     hexLine,
     hexLerp,
 
-} from '../modules/lib/hexagons.js'
+} from '../../modules/lib/hexagons.js'
 
 const hexA = hexagon(0, 1, -1)
 const hexB = hexagon(-1, 0, 1)
