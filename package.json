@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "@capacitor/core": "^3.4.3",
+    "@reduxjs/toolkit": "^1.8.1",
     "ava": "^4.1.0"
   },
   "devDependencies": {

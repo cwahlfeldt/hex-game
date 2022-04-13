@@ -5,21 +5,17 @@ import {
     getAllNeighbors,
     hexagon,
     hexCorners,
-    layout,
-    point
 } from "../../modules/lib/hexagons.js";
-import {hexagonPiece} from "../../modules/pieces/hexagonMap.js";
+import {hexagonPiece} from "../../modules/lib/hexagonMap.js";
 
 const hex = hexagon(6, -5, -1)
-const size = point(32, 32)
-const hexLayout = layout(size, point(0, 0))
-
 const expectedHexagonPiece = {
     hex,
-    center: convertHexToPixel(hexLayout, hex),
-    corners: hexCorners(hexLayout, hex),
+    center: convertHexToPixel(hex),
+    corners: hexCorners(hex),
     neighbors: getAllNeighbors(hex),
     isTraversable: true,
+    color: 'rgba(42, 160, 216, .5)',
 }
 
 test(`create a hexagon piece`, t => {

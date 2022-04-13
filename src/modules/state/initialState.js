@@ -1,4 +1,7 @@
 // maps are generated
+import {hexagonPiece, hexShapedMap} from "../lib/hexagonMap.js";
+import {hexagon} from "../lib/hexagons.js";
+
 const map = [
     {
         hex: {q: 1, r: -1, s: 0},
@@ -22,6 +25,8 @@ const exampleGameState = {
         stage: 1,
         playerLocation: {x: -1, y: 1},
         numOfEnemies: 1,
+        currentHex: null,
+        map: hexShapedMap(3),
         enemies: [
             {
                 type: 'grunt',
@@ -36,14 +41,20 @@ const exampleGameState = {
 }
 
 const initialState = {
-    turn: '',
-    game: {
-        turn: 'player',
-        stage: 1,
-        playerLocation: {x: 0, y: 0},
-        numOfEnemies: 0,
-        enemies: [],
+    player: {
+        name: 'waffles',
+        level: 1,
+        health: 3,
+        power: 100,
+        credits: 0,
+        range: 1, // idea: the range can be outside of hex neighbors ex: range > 1 <= 2 for like jumps abd waprs
     },
+    turn: 'player',
+    stage: 1,
+    numOfEnemies: 0,
+    currentHex: null,
+    map: hexShapedMap(3),
+    enemies: [],
 }
 
 export default initialState

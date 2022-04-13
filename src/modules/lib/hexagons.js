@@ -1,7 +1,6 @@
 import {roundCubeCoords, deepEqual, throwError, lerp} from './utilities.js'
-import {hexagonPiece} from "../pieces/hexagonMap.js";
 
-const {PI, sqrt, abs, cos, sin, min, max} = Math;
+const {PI, sqrt, abs, cos, sin, max, round} = Math;
 
 // using only flat top orientation
 export const ORIENTATION = {
@@ -19,6 +18,13 @@ export const DIRECTIONS = {
     downRight: hexagon(-1, 1, 0),
 }
 
+export const SIZE = 60
+export const ORIGIN = 0
+export const LAYOUT = layout(
+    point(SIZE, SIZE),
+    point(ORIGIN, ORIGIN)
+)
+
 export function hexagon(q, r, s) {
     if (q + r + s !== 0)
         throwError('q + r + s must equal 0')
@@ -27,6 +33,9 @@ export function hexagon(q, r, s) {
 }
 
 export function fracHexagon(q, r, s) {
+    if (round(q + r + s) !== 0)
+        throwError('q + r + s must equal 0')
+
     return {q, r, s}
 }
 
@@ -87,18 +96,18 @@ export function layout(size, origin) {
     }
 }
 
-export function convertHexToPixel(layout, hex) {
+export function convertHexToPixel(hex) {
     const M = ORIENTATION
-    const x = ((M.f0 * hex.q) + (M.f1 * hex.r)) * layout.size.x
-    const y = ((M.f2 * hex.q) + (M.f3 * hex.r)) * layout.size.y
-    return point(x + layout.origin.x, y + layout.origin.y)
+    const x = ((M.f0 * hex.q) + (M.f1 * hex.r)) * LAYOUT.size.x
+    const y = ((M.f2 * hex.q) + (M.f3 * hex.r)) * LAYOUT.size.y
+    return point(x + LAYOUT.origin.x, y + LAYOUT.origin.y)
 }
 
-export function convertPixelToHex(layout, pixelPoint) {
+export function convertPixelToHex(pixelPoint) {
     const M = ORIENTATION
     const pt = point(
-        (pixelPoint.x - layout.origin.x) / layout.size.x,
-        (pixelPoint.y - layout.origin.y) / layout.size.y,
+        (pixelPoint.x - LAYOUT.origin.x) / LAYOUT.size.x,
+        (pixelPoint.y - LAYOUT.origin.y) / LAYOUT.size.y,
     )
     const q = M.b0 * pt.x + M.b1 * pt.y;
     const r = M.b2 * pt.x + M.b3 * pt.y;
@@ -110,17 +119,17 @@ export function convertPixelToHex(layout, pixelPoint) {
     )
 }
 
-export function getCornerOffset(layout, corner) {
-    const size = layout.size
+export function getCornerOffset(corner) {
+    const size = LAYOUT.size
     const angle = 2.0 * PI * (ORIENTATION.startAngle + corner) / 6
     return point(size.x * cos(angle), size.y * sin(angle))
 }
 
-export function hexCorners(layout, hex) {
+export function hexCorners(hex) {
     const corners = []
-    const center = convertHexToPixel(layout, hex)
+    const center = convertHexToPixel(hex)
     for (let i = 0; i < 6; i++) {
-        const offset = getCornerOffset(layout, i)
+        const offset = getCornerOffset(i)
         corners.push(point(center.x + offset.x, center.y + offset.y))
     }
     return corners

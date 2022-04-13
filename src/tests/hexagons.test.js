@@ -15,10 +15,11 @@ import {
     convertPixelToHex,
     getCornerOffset,
     hexCorners,
-    getAllNeighbors, hexLine, fracHexagon, hexLerp,
+    getAllNeighbors,
+    hexLine,
+    hexLerp,
 
 } from '../modules/lib/hexagons.js'
-import {roundCubeCoords} from "../modules/lib/utilities.js";
 
 const hexA = hexagon(0, 1, -1)
 const hexB = hexagon(-1, 0, 1)
@@ -92,63 +93,51 @@ test(`can create layout`, t => {
 })
 
 test(`convert hexagons to pixels`, t => {
-    const size = point(10, 10)
-    const origin = point(0, 0)
-    const hexLayout = layout(size, origin)
     const hexC = hexagon(0, 0, 0)
     const hexD = hexagon(4, 0, -4)
     t.deepEqual(
-        convertHexToPixel(hexLayout, hexC),
+        convertHexToPixel(hexC),
         point(0, 0)
     )
     t.deepEqual(
-        convertHexToPixel(hexLayout, hexD),
-        point(60, 34.64101615137754)
+        convertHexToPixel(hexD),
+        point(360, 207.84609690826525)
     )
 })
 
 test(`convert pixels to hexagon`, t => {
-    const size = point(10, 10)
-    const origin = point(0, 0)
-    const hexLayout = layout(size, origin)
     const hex = hexagon(4, 0, -4)
     const diffHex = hexagon(1, 0, -1)
-    const pixelPoint = convertHexToPixel(hexLayout, hex)
-    const diffPixelPoint = convertHexToPixel(hexLayout, diffHex)
+    const pixelPoint = convertHexToPixel(hex)
+    const diffPixelPoint = convertHexToPixel(diffHex)
     t.deepEqual(
-        convertPixelToHex(hexLayout, pixelPoint),
+        convertPixelToHex(pixelPoint),
         hexagon(4, 0, -4)
     )
     t.deepEqual(
-        convertPixelToHex(hexLayout, diffPixelPoint),
+        convertPixelToHex(diffPixelPoint),
         hexagon(1, 0, -1)
     )
 })
 
 test(`get the corner offset of a hexagon`, t => {
-    const size = point(10, 10)
-    const origin = point(0, 0)
-    const hexLayout = layout(size, origin)
     t.deepEqual(
-        getCornerOffset(hexLayout, 4),
-        point(-5.000000000000004, -8.660254037844386)
+        getCornerOffset(4),
+        point(-30.00000000000003, -51.961524227066306)
     )
 })
 
 test(`create hexagon corner points`, t => {
-    const size = point(10, 10)
-    const origin = point(0, 0)
-    const hexLayout = layout(size, origin)
     const hex = hexagon(4, 0, -4)
     t.deepEqual(
-        hexCorners(hexLayout, hex),
+        hexCorners(hex),
         [
-            point(70, 34.64101615137754),
-            point(65, 43.301270189221924),
-            point(55, 43.30127018922193),
-            point(50, 34.64101615137754),
-            point(54.99999999999999, 25.980762113533157),
-            point(65, 25.980762113533157),
+            point(420, 207.84609690826525),
+            point(390, 259.80762113533154),
+            point(330, 259.8076211353316),
+            point(300, 207.84609690826525),
+            point(330, 155.88457268119896),
+            point(390, 155.88457268119893),
         ]
     )
 })
