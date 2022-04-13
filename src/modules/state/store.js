@@ -1,9 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit'
-import gameSlice from "./reducers.js";
+import {configureStore} from '@reduxjs/toolkit'
+import mapSlice from "./slices/mapSlice.js";
 
 const store = configureStore({
     reducer: {
-        game: gameSlice,
+        map: mapSlice,
     },
 })
 
