@@ -2,7 +2,6 @@ import {roundCubeCoords, deepEqual, throwError, lerp} from './utilities.js'
 
 const {PI, sqrt, abs, cos, sin, max, round} = Math;
 
-// using only flat top orientation
 export const ORIENTATION = {
     f0: 3.0 / 2.0, f1: 0.0, f2: sqrt(3.0) / 2.0, f3: sqrt(3.0),
     b0: 2.0 / 3.0, b1: 0.0, b2: -1.0 / 3.0, b3: sqrt(3.0) / 3.0,

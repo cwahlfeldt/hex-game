@@ -10,7 +10,7 @@ export function deepEqual(objA, objB) {
     return objA && objB && typeOfObjA === 'object' && typeOfObjA === typeOfObjB ? (
         ok(objA).length === ok(objB).length &&
             ok(objA).every(key => deepEqual(objA[key], objB[key]))
-    ) : (objA === objB);
+    ) : (objA === objB)
 }
 
 export function roundCubeCoords(qq, rr, ss) {
@@ -38,9 +38,13 @@ export function roundCubeCoords(qq, rr, ss) {
 }
 
 export function lerp(a, b, t) {
-    return a * (1-t) + b * t;
+    return a * (1-t) + b * t
 }
 
 export function randNum(min, max) {
-    return round(random() * (max - min) + min);
+    return round(random() * (max - min) + min)
+}
+
+export function uuid() {
+    return random().toString(36).slice(-6)
 }
