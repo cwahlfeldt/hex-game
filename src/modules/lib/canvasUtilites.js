@@ -24,7 +24,6 @@ export function drawCircle(
 ) {
     ctx.beginPath()
     ctx.arc(x, y, radius, 0, 2 * Math.PI, false)
-    ctx.moveTo(x, y)
     ctx.fillStyle = color
     ctx.fill()
     ctx.lineWidth = strokeWidth

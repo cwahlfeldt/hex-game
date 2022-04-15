@@ -6,27 +6,38 @@ import Player from "./modules/components/Player.js";
 import {movePlayer} from "./modules/state/slices/gameSlice.js";
 import {point} from "./modules/lib/hexagons.js";
 import Enemy from "./modules/components/Enemy.js";
+import {lerp} from "./modules/lib/utilities.js";
 
 const root = document.getElementById("game")
 const ctx = root.getContext("2d")
+let animFrame = null
 
 store.dispatch(generateMap(6))
 store.dispatch(spawnPlayer())
 store.dispatch(spawnEnemies(4))
+const state = store.getState()
+let {x, y} = {x: state.game.player.location.x, y: state.game.player.location.y}
 
 render()
 function render() {
     cleanup()
     const state = store.getState()
+    const endX = state.game.player.location.x
+    const endY = state.game.player.location.y
+    x = lerp(x, endX, 0.05)
+    y = lerp(y, endY, 0.05)
 
     Map(ctx, state.game.map)
     state.game.enemies.forEach(enemy => {
-        // console.log(enemy)
         Enemy(ctx, enemy.location)
     })
-    Player(ctx, state.game.player.location)
+    Player(ctx, point(x, y))
+    animFrame = requestAnimationFrame(render);
 }
-store.subscribe(render)
+store.subscribe(() => {
+    render()
+    cancelAnimationFrame(animFrame)
+})
 window.addEventListener('resize', render)
 
 root.addEventListener('click', event => {
