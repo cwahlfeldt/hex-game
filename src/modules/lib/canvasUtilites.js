@@ -13,3 +13,22 @@ export function getMousePos(ctx, event) {
         y: x * invMat.b + y * invMat.d + invMat.f
     };
 }
+
+export function drawCircle(
+    ctx,
+    x = 0,
+    y = 0,
+    color = 'black',
+    radius = 20,
+    strokeWidth = 0
+) {
+    ctx.beginPath()
+    ctx.arc(x, y, radius, 0, 2 * Math.PI, false)
+    ctx.moveTo(x, y)
+    ctx.fillStyle = color
+    ctx.fill()
+    ctx.lineWidth = strokeWidth
+    ctx.strokeStyle = color
+    ctx.stroke()
+    ctx.closePath()
+}

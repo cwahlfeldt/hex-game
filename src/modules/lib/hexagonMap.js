@@ -1,4 +1,12 @@
-import {convertHexToPixel, convertPixelToHex, getAllNeighbors, hexagon, hexCorners, point} from "./hexagons.js";
+import {
+    areHexagonsEqual,
+    convertHexToPixel,
+    convertPixelToHex,
+    getAllNeighbors,
+    hexagon,
+    hexCorners,
+    point
+} from "./hexagons.js";
 import {randNum} from "./utilities.js";
 
 const {min, max} = Math
@@ -13,6 +21,7 @@ export function hexagonPiece(optionArgs) {
     const hex = hexagon(options.hex.q, options.hex.r, options.hex.s)
     return {
         hex,
+        currentPiece: 'none',
         center: convertHexToPixel(hex),
         corners: hexCorners(hex),
         neighbors: getAllNeighbors(hex),
@@ -51,9 +60,15 @@ export function randomizeTraversableHexes(hexMap, numOfTiles = 6) {
     Array.from({length: numOfTiles}).forEach(i => {
         const num = randNum(min, max)
         const randHex = map[num]
-        console.log(num)
         randHex.isTraversable = !randHex.isTraversable
     })
     return map
+}
 
+export function selectNearestHex(map, {x, y}) {
+    const nearestHex = getNearestHexPiece(x, y)
+    const index = map.findIndex(item => areHexagonsEqual(item.hex, nearestHex.hex))
+    if (index === -1)
+        return null
+    return map[index]
 }

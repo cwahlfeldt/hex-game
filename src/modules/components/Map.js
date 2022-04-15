@@ -7,7 +7,7 @@ function drawHexagon(ctx, hex) {
     })
     ctx.lineTo(corners[0].x, corners[0].y)
 
-    ctx.lineWidth = 6
+    ctx.lineWidth = 2
     ctx.strokeStyle = '#3f3f3f'
     ctx.stroke()
 

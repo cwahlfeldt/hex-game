@@ -3,13 +3,9 @@
   "scripts": {
     "start": "parcel www/index.html"
   },
-  "dependencies": {
-    "@capacitor/core": "^3.4.3",
-    "@reduxjs/toolkit": "^1.8.1",
-    "ava": "^4.1.0"
-  },
   "devDependencies": {
-    "@capacitor/cli": "^3.4.3",
-    "parcel": "^2.4.0"
+    "ava": "^4.1.0",
+    "parcel": "^2.4.0",
+    "@reduxjs/toolkit": "^1.8.1"
   }
 }
