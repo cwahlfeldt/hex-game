@@ -22,7 +22,7 @@ export function tile(
         isTraversable: isTraversable,
         corners: hexCorners(hexTile),
         neighbors: getAllNeighbors(hexTile),
-        currentPiece: 'none',
+        occupants: 'none',
         color: 'rgba(42, 160, 216, .5)',
     }
 }
@@ -61,4 +61,12 @@ export function selectNearestHexTile(map, {x, y}) {
     if (index === -1)
         return null
     return map[index]
+}
+
+export function indexOfNearestTile(map, {x, y}) {
+    const nearestHexTile = getNearestHexTile(x, y)
+    const index = map.findIndex(item => areHexagonsEqual(item.cubeCoords, nearestHexTile.cubeCoords))
+    if (index === -1)
+        return null
+    return index
 }

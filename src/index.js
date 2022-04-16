@@ -8,6 +8,7 @@ import Map from './modules/components/Map.js'
 import Player from "./modules/components/Player.js";
 import Enemy from "./modules/components/Enemy.js";
 
+const {round} = Math
 const root = document.getElementById("game")
 const ctx = root.getContext("2d")
 let animFrame = null
@@ -37,6 +38,7 @@ function render() {
     Player(ctx, point(x, y))
     animFrame = requestAnimationFrame(render);
 }
+
 store.subscribe(() => {
     cancelAnimationFrame(animFrame)
     render()
@@ -53,12 +55,4 @@ function cleanup() {
     root.height = window.innerHeight
     ctx.translate(root.width * 0.5, root.height * 0.5)
     ctx.clearRect(0, 0, root.width, root.height)
-}
-
-function animateLerp(start, end, callback) {
-    start = {
-        x: lerp(start.x, end.x, 0.05),
-        y: lerp(start.y, end.y, 0.05)
-    }
-    callback(start)
 }
