@@ -46,7 +46,8 @@ export function hexShapedMap(radius) {
 
 export function tileMap(radius) {
     const hexMap = randomizeTraversableHexes(
-        hexShapedMap(radius)
+        hexShapedMap(radius),
+        radius * 4
     )
     let map = []
     for (let i = 0; i < hexMap.length; i++) {
@@ -64,18 +65,6 @@ export function mapGraph(tileMap) {
         .map(tile => tile.neighborIndexes.filter(t => t !== -1))
 }
 
-// export function generateMapWithGraph(radius, removeAmt) {
-//     const map = randomizeTraversableHexes(
-//         tileMap(radius),
-//         radius * 4
-//     )
-//     const graph = mapGraph(map)
-//     return {
-//         map,
-//         graph,
-//     }
-// }
-
 export function selectNearestHexTile(map, {x, y}) {
     const nearestHexTile = getNearestHexTile(x, y)
     const index = map.findIndex(item => areHexagonsEqual(item.cubeCoords, nearestHexTile.cubeCoords))
@@ -92,7 +81,7 @@ export function indexOfNearestTile(map, {x, y}) {
     return index
 }
 
-export function randomizeTraversableHexes(hexTileMap, numOfTiles = 6) {
+export function randomizeTraversableHexes(hexTileMap, numOfTiles = 20) {
     const map = hexTileMap
     const max = map.length - 1
     const min = 1

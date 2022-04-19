@@ -1,26 +1,26 @@
 import store from "./modules/state/store.js"
-import {generateMap, spawnEnemies, spawnPlayer} from "./modules/state/slices/gameSlice.js";
+import {generateMap, setupGame, spawnEnemies, spawnPlayer} from "./modules/state/slices/gameSlice.js";
 import {getMousePos} from "./modules/lib/canvasUtilites.js"
 import {movePlayer} from "./modules/state/slices/gameSlice.js";
 import {point} from "./modules/lib/hexagons.js";
-import {lerp} from "./modules/lib/utilities.js";
+import {inverseLerp, lerp, smoothstep} from "./modules/lib/utilities.js";
 import Map from './modules/components/Map.js'
 import Player from "./modules/components/Player.js";
 import Enemy from "./modules/components/Enemy.js";
 import {createGraph, generateMapWithGraph, hexShapedMap, mapDict, mapGraph, tileMap} from "./modules/lib/map.js";
 
-const {round} = Math
 const root = document.getElementById("game")
 const ctx = root.getContext("2d")
 let animFrame = null
-
-store.dispatch(generateMap(6))
-store.dispatch(spawnPlayer())
-store.dispatch(spawnEnemies(4))
+//
+// store.dispatch(generateMap(6))
+// store.dispatch(spawnPlayer())
+// store.dispatch(spawnEnemies(4))
 
 const state = store.getState()
 let {x, y} = state.game.player.location
 
+store.dispatch(setupGame({radius: 6, numOfEnemies: 4}))
 render()
 function render() {
     cleanup()
@@ -57,3 +57,10 @@ function cleanup() {
     ctx.translate(root.width * 0.5, root.height * 0.5)
     ctx.clearRect(0, 0, root.width, root.height)
 }
+
+//to round to n decimal places
+//to round to n decimal places
+// function round(num, places = 8) {
+//     var multiplier = Math.pow(10, places);
+//     return Math.round(num * multiplier) / multiplier;
+// }

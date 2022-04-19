@@ -2,7 +2,6 @@ import {createSlice, current} from '@reduxjs/toolkit'
 import {
     generateMapWithGraph,
     hexShapedMap, indexOfNearestTile, mapGraph,
-    randomizeTraversableHexes,
     selectNearestHexTile,
     tile, tileMap
 } from "../../lib/map.js"
@@ -34,32 +33,37 @@ const gameSlice = createSlice({
         map: [],
         graph: [],
         selectedHex: tile(hexagon(0, 0, 0)),
+        turns: [],
     },
 
     reducers: {
-        spawnPlayer: (state, action) => {
-            const map = state.map
-            const tileIndex = indexOfTraversableTile(map)
+        setupGame: (state, action) => {
+            const radius = action.payload.radius
+            const numOfEnemies = action.payload.numOfEnemies
+            const map = tileMap(radius)
+            const graph = mapGraph(map)
+            let turns = state.turns
 
-            map[tileIndex].occupants = 'player'
-            state.player.location = map[tileIndex].screenCoords
-        },
+            const playerTile = indexOfTraversableTile(map)
+            map[playerTile].occupants = 'player'
+            map[playerTile].color = 'rgba(42, 160, 216, .9)'
+            state.player.location = map[playerTile].screenCoords
 
-        spawnEnemies: (state, action) => {
-            const amount = action.payload
-            const map = state.map
-            state.enemies = Array.from({length: amount}, () => {
-                const tileIndex = indexOfTraversableTile(map)
+            state.enemies = Array.from({length: numOfEnemies}, () => {
+                const enemyTile = indexOfTraversableTile(map)
                 let enemy = {...state.enemyTypes.grunt}
-                enemy.location = map[tileIndex].screenCoords
-                map[tileIndex].occupants = 'enemy'
+                enemy.location = map[enemyTile].screenCoords
+                map[enemyTile].occupants = 'enemy'
                 return enemy
             })
-        },
 
-        generateMap: (state, action) => {
-            const map = tileMap(6)
-            const graph = mapGraph(map)
+            state.turns.push({
+                map: map,
+                lastTileIndex: playerTile,
+                player: state.player,
+                enemies: state.enemies
+            })
+
             state.map = map
             state.graph = graph
         },
@@ -74,16 +78,19 @@ const gameSlice = createSlice({
             const map = state.map
             const pos = action.payload
             const nearestTile = selectNearestHexTile(map, pos)
+            const lastTurn = state.turns[state.turns.length - 1]
 
-            if (nearestTile === null) return
-
-            map[nearestTile.index].neighborIndexes.forEach(nIndex => {
-                const neighbor = map[nIndex]
-                neighbor.color = 'rgba(42, 160, 216, .7)'
-            })
+            if (nearestTile === null || nearestTile.isTraversable === false) return
 
             map[nearestTile.index].color = 'rgba(42, 160, 216, .9)'
-            map[nearestTile.index].occupants = 'player'
+            state.turns.push({
+                map: map,
+                lastTileIndex: nearestTile.index,
+                player: state.player,
+                enemies: state.enemies
+            })
+            map[lastTurn.lastTileIndex].color ='rgba(42, 160, 216, .5)'
+
             state.player.location = nearestTile.screenCoords
         }
     }
@@ -102,6 +109,7 @@ function indexOfTraversableTile(map) {
 }
 
 export const {
+    setupGame,
     spawnPlayer,
     movePlayer,
     generateMap,

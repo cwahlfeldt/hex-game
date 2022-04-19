@@ -68,3 +68,32 @@ export function alphabeticalKeys(arr) {
     }
     return obj
 }
+const EPSILON = Number.EPSILON;
+function clamp (value, min, max) {
+    return min < max
+        ? (value < min ? min : value > max ? max : value)
+        : (value < max ? max : value > min ? min : value);
+}
+function inverseLerp (min, max, t) {
+    if (Math.abs(min - max) < EPSILON) return 0;
+    else return (t - min) / (max - min);
+}
+
+function smoothstep (min, max, t) {
+    const x = clamp(inverseLerp(min, max, t), 0, 1);
+    return x * x * (3 - 2 * x);
+}
+
+
+// vector<Hex> hex_linedraw(Hex a, Hex b) {
+//     int N = hex_distance(a, b);
+//     FractionalHex a_nudge(a.q + 1e-6, a.r + 1e-6, a.s - 2e-6);
+//     FractionalHex b_nudge(b.q + 1e-6, b.r + 1e-6, b.s - 2e-6);
+//     vector<Hex> results = {};
+//     double step = 1.0 / max(N, 1);
+//     for (int i = 0; i <= N; i++) {
+//         results.push_back(
+//             hex_round(hex_lerp(a_nudge, b_nudge, step * i)));
+//     }
+//     return results;
+// }

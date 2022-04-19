@@ -1,11 +1,14 @@
 {
   "type": "module",
   "scripts": {
-    "start": "parcel www/index.html"
+    "start": "parcel www/index.html",
+    "build": "parcel build www/index.html --public-url ./",
+    "deploy": "rm -rf ./dist && npm run build && gh-pages -d dist"
   },
   "devDependencies": {
+    "@reduxjs/toolkit": "^1.8.1",
     "ava": "^4.1.0",
-    "parcel": "^2.4.0",
-    "@reduxjs/toolkit": "^1.8.1"
+    "gh-pages": "^3.2.3",
+    "parcel": "^2.4.0"
   }
 }
