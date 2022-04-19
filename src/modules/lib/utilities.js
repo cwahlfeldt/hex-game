@@ -48,3 +48,23 @@ export function randNum(min, max) {
 export function uuid() {
     return random().toString(36).slice(-6)
 }
+
+const alphabetArray = ('abcdefghijklmnopqrstuvwxyz').split('')
+export function alphabeticalKeys(arr) {
+    const alphabetLength = alphabetArray.length
+    let keyAmt = 1
+    let j = 0
+    const obj = {}
+    for (let i = 0; i < arr.length; i++) {
+        if (i > 0 && i % alphabetLength === 0) {
+            keyAmt++
+            j = 0
+        }
+        let key = Array.from({length: keyAmt})
+            .map(() => alphabetArray[j])
+            .join('')
+        Object.assign(obj, {[key]: arr[i]})
+        j++
+    }
+    return obj
+}

@@ -7,6 +7,7 @@ import {lerp} from "./modules/lib/utilities.js";
 import Map from './modules/components/Map.js'
 import Player from "./modules/components/Player.js";
 import Enemy from "./modules/components/Enemy.js";
+import {createGraph, generateMapWithGraph, hexShapedMap, mapDict, mapGraph, tileMap} from "./modules/lib/map.js";
 
 const {round} = Math
 const root = document.getElementById("game")

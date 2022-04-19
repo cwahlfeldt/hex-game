@@ -1,9 +1,10 @@
 import {createSlice, current} from '@reduxjs/toolkit'
 import {
-    hexShapedMap, indexOfNearestTile,
+    generateMapWithGraph,
+    hexShapedMap, indexOfNearestTile, mapGraph,
     randomizeTraversableHexes,
     selectNearestHexTile,
-    tile
+    tile, tileMap
 } from "../../lib/map.js"
 import {hexagon, point} from "../../lib/hexagons.js"
 import {deepEqual, randNum, roundCubeCoords} from "../../lib/utilities.js";
@@ -13,6 +14,7 @@ const gameSlice = createSlice({
 
     initialState: {
         player: {
+            tileIndex: 0,
             location: point(0, 0),
             health: 3,
             power: 100,
@@ -20,6 +22,7 @@ const gameSlice = createSlice({
         },
         enemyTypes: {
             grunt: {
+                tileIndex: 0,
                 location: point(0, 0),
                 health: 1,
                 drops: {
@@ -28,7 +31,8 @@ const gameSlice = createSlice({
             }
         },
         enemies: [],
-        map: hexShapedMap(3),
+        map: [],
+        graph: [],
         selectedHex: tile(hexagon(0, 0, 0)),
     },
 
@@ -54,8 +58,10 @@ const gameSlice = createSlice({
         },
 
         generateMap: (state, action) => {
-            const map = hexShapedMap(action.payload)
-            state.map = randomizeTraversableHexes(map, map.length / 4)
+            const map = tileMap(6)
+            const graph = mapGraph(map)
+            state.map = map
+            state.graph = graph
         },
 
         selectHex: (state, action) => {
@@ -66,26 +72,18 @@ const gameSlice = createSlice({
 
         movePlayer: (state, action) => {
             const map = state.map
-            const end = action.payload
-            const nearestTile = selectNearestHexTile(map, end)
-            const tileIndex = indexOfNearestTile(map, end)
+            const pos = action.payload
+            const nearestTile = selectNearestHexTile(map, pos)
 
-            if (nearestTile === null || !nearestTile.isTraversable || nearestTile.occupants === 'enemy')
-                return
+            if (nearestTile === null) return
 
-            map[tileIndex].neighbors.forEach((tile) => {
-                if (typeof tile !== 'undefined') {
-                    const neighbor = tile
-                    console.log(current(neighbor))
-                    const hexTile = map.findIndex(hex => deepEqual(hex.cubeCoords, neighbor))
-                    if (hexTile !== -1)
-                        map[hexTile].color = 'purple'
-                }
+            map[nearestTile.index].neighborIndexes.forEach(nIndex => {
+                const neighbor = map[nIndex]
+                neighbor.color = 'rgba(42, 160, 216, .7)'
             })
 
-            console.log(current(map[tileIndex]))
-
-            map[tileIndex].occupants = 'player'
+            map[nearestTile.index].color = 'rgba(42, 160, 216, .9)'
+            map[nearestTile.index].occupants = 'player'
             state.player.location = nearestTile.screenCoords
         }
     }

@@ -15,7 +15,7 @@ const expectedHexTile = {
     isTraversable: true,
     corners: hexCorners(hexTile),
     neighbors: getAllNeighbors(hexTile),
-    currentPiece: 'none',
+    occupants: 'none',
     color: 'rgba(42, 160, 216, .5)',
 }
 

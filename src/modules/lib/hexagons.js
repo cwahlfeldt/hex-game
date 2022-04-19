@@ -14,7 +14,7 @@ export const DIRECTIONS = {
     upRight:   hexagon(1, -1, 0),
     downLeft:  hexagon(-1, 1, 0),
     down:      hexagon(0, 1, -1),
-    downRight: hexagon(-1, 1, 0),
+    downRight: hexagon(1, 0, -1),
 }
 
 export const SIZE = 40
