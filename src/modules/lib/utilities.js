@@ -45,10 +45,6 @@ export function randNum(min, max) {
     return round(random() * (max - min) + min)
 }
 
-export function uuid() {
-    return random().toString(36).slice(-6)
-}
-
 const alphabetArray = ('abcdefghijklmnopqrstuvwxyz').split('')
 export function alphabeticalKeys(arr) {
     const alphabetLength = alphabetArray.length

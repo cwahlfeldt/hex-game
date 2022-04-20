@@ -23,6 +23,7 @@ let {x, y} = state.game.player.location
 store.dispatch(setupGame({radius: 6, numOfEnemies: 4}))
 render()
 function render() {
+    animFrame = requestAnimationFrame(render);
     cleanup()
     const state = store.getState()
     const map = state.game.map
@@ -37,7 +38,6 @@ function render() {
         Enemy(ctx, point(enemy.location.x, enemy.location.y))
     })
     Player(ctx, point(x, y))
-    animFrame = requestAnimationFrame(render);
 }
 
 store.subscribe(() => {

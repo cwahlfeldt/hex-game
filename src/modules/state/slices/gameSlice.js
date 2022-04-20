@@ -7,6 +7,7 @@ import {
 } from "../../lib/map.js"
 import {hexagon, point} from "../../lib/hexagons.js"
 import {deepEqual, randNum, roundCubeCoords} from "../../lib/utilities.js";
+import {breadthFirstSearch} from "../../lib/pathFinding.js";
 
 const gameSlice = createSlice({
     name: 'game',
@@ -42,12 +43,12 @@ const gameSlice = createSlice({
             const numOfEnemies = action.payload.numOfEnemies
             const map = tileMap(radius)
             const graph = mapGraph(map)
-            let turns = state.turns
 
             const playerTile = indexOfTraversableTile(map)
             map[playerTile].occupants = 'player'
-            map[playerTile].color = 'rgba(42, 160, 216, .9)'
+            // map[playerTile].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .9)')
             state.player.location = map[playerTile].screenCoords
+            state.player.tileIndex = playerTile
 
             state.enemies = Array.from({length: numOfEnemies}, () => {
                 const enemyTile = indexOfTraversableTile(map)
@@ -68,12 +69,6 @@ const gameSlice = createSlice({
             state.graph = graph
         },
 
-        selectHex: (state, action) => {
-            const map = state.map
-            const {x, y} = action.payload
-            state.selectedHex = selectNearestHexTile(map, point(x, y))
-        },
-
         movePlayer: (state, action) => {
             const map = state.map
             const pos = action.payload
@@ -82,15 +77,25 @@ const gameSlice = createSlice({
 
             if (nearestTile === null || nearestTile.isTraversable === false) return
 
-            map[nearestTile.index].color = 'rgba(42, 160, 216, .9)'
+            // console.log(state.player.tileIndex)
+            // console.log(state.player.tileIndex, nearestTile.index)
+            const path = breadthFirstSearch(state.graph, state.player.tileIndex, nearestTile.index)
+            console.log(path)
+            path.forEach(tileIndex => {
+                map[tileIndex].color = 'black'
+            })
+
+            // console.log(current(map[lastTurn.lastTileIndex].neighborIndexes))
+            // map[lastTurn.lastTileIndex].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .5)')
+            // map[nearestTile.index].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .9)')
             state.turns.push({
                 map: map,
                 lastTileIndex: nearestTile.index,
                 player: state.player,
                 enemies: state.enemies
             })
-            map[lastTurn.lastTileIndex].color ='rgba(42, 160, 216, .5)'
 
+            state.player.tileIndex = nearestTile.index
             state.player.location = nearestTile.screenCoords
         }
     }
@@ -110,10 +115,7 @@ function indexOfTraversableTile(map) {
 
 export const {
     setupGame,
-    spawnPlayer,
     movePlayer,
-    generateMap,
-    spawnEnemies
 } = gameSlice.actions
 
 export default gameSlice.reducer
