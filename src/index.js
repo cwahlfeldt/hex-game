@@ -7,7 +7,6 @@ import {inverseLerp, lerp, smoothstep} from "./modules/lib/utilities.js";
 import Map from './modules/components/Map.js'
 import Player from "./modules/components/Player.js";
 import Enemy from "./modules/components/Enemy.js";
-import {createGraph, generateMapWithGraph, hexShapedMap, mapDict, mapGraph, tileMap} from "./modules/lib/map.js";
 
 const root = document.getElementById("game")
 const ctx = root.getContext("2d")
@@ -26,15 +25,13 @@ function render() {
     animFrame = requestAnimationFrame(render);
     cleanup()
     const state = store.getState()
-    const map = state.game.map
-    const enemies = state.game.enemies
     const playerLocation = state.game.player.location
 
     x = lerp(x, playerLocation.x, 0.1)
     y = lerp(y, playerLocation.y, 0.1)
 
-    Map(ctx, map)
-    enemies.forEach(enemy => {
+    Map(ctx, state.game.map)
+    state.game.enemies.forEach(enemy => {
         Enemy(ctx, point(enemy.location.x, enemy.location.y))
     })
     Player(ctx, point(x, y))

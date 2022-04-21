@@ -161,3 +161,12 @@ export function hexLine(hexA, hexB) {
     return results
 }
 
+export function direction(coord1, coord2) {
+    if (coord1.q < coord2.q) {
+        return coord1.r > coord2.r ? DIRECTIONS.upLeft: DIRECTIONS.up;
+    } else if (coord1.q > coord2.q) {
+        return coord1.r < coord2.r ? DIRECTIONS.downRight : DIRECTIONS.down;
+    } else {
+        return coord1.r < coord2.r ? DIRECTIONS.upRight : DIRECTIONS.downLeft;
+    }
+}

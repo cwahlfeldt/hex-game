@@ -8,6 +8,7 @@ import {
     point
 } from "./hexagons.js";
 import {alphabeticalKeys, deepEqual, randNum} from "./utilities.js";
+import {Grid} from "hexagrid";
 
 const {min, max} = Math
 
@@ -23,6 +24,7 @@ export function tile(
         isTraversable: isTraversable,
         corners: hexCorners(hexTile),
         neighborIndexes: getAllNeighbors(hexTile),
+        weight: 1,
         occupants: 'none',
         color: 'rgba(42, 160, 216, .5)',
     }
@@ -44,7 +46,7 @@ export function hexShapedMap(radius) {
     return map
 }
 
-export function tileMap(radius) {
+export function tileMap(radius = 6) {
     const hexMap = randomizeTraversableHexes(
         hexShapedMap(radius),
         radius * 4
@@ -60,9 +62,23 @@ export function tileMap(radius) {
     return map
 }
 
-export function mapGraph(tileMap) {
+export function gridGraph(tileMap) {
+    let obj = {}
+    for (let i = 0; i < tileMap.length; i++) {
+        const cubeCoords = JSON.stringify(tileMap[i].cubeCoords)
+        Object.assign(obj, {[cubeCoords]: tileMap[i].neighborIndexes.map(n => tileMap[n].cubeCoords)})
+    }
+    return obj
+}
+
+export function mapGraph(tileMap = tileMap(6)) {
     return tileMap
         .map(tile => tile.neighborIndexes.filter(t => t !== -1))
+}
+
+export function mapGraphWithWeight(tileMap) {
+    return tileMap
+        .map(tile => tile.neighborIndexes.filter(t => t !== -1).map(nIndex => ({neighbor: nIndex, weight: tileMap[nIndex].weight})))
 }
 
 export function selectNearestHexTile(map, {x, y}) {
@@ -92,3 +108,4 @@ export function randomizeTraversableHexes(hexTileMap, numOfTiles = 20) {
     })
     return map
 }
+
