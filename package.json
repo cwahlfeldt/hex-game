@@ -3,7 +3,7 @@
   "scripts": {
     "start": "parcel www/index.html",
     "build": "parcel build www/index.html --public-url ./",
-    "deploy": "rm -rf ./dist && npm run build && gh-pages -d dist"
+    "deploy": "rm -rf ./dist && npm run build && gh-pages -d ./dist && rm -rf ./dist"
   },
   "devDependencies": {
     "@reduxjs/toolkit": "^1.8.1",

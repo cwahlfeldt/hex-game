@@ -49,7 +49,7 @@ export function hexShapedMap(radius) {
 export function tileMap(radius = 6) {
     const hexMap = randomizeTraversableHexes(
         hexShapedMap(radius),
-        radius * 4
+        4
     )
     let map = []
     for (let i = 0; i < hexMap.length; i++) {

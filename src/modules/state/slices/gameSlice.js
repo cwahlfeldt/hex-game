@@ -50,13 +50,13 @@ const gameSlice = createSlice({
         selectedHex: tile(hexagon(0, 0, 0)),
         turns: [],
     },
-
     reducers: {
         setupGame: (state, action) => {
             const radius = action.payload.radius
             const numOfEnemies = action.payload.numOfEnemies
             const map = tileMap(radius)
             const graph = mapGraph(map)
+            console.log(JSON.stringify(graph))
 
             const playerTile = indexOfTraversableTile(map)
             map[playerTile].occupants = 'player'
