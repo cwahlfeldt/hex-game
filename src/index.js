@@ -22,19 +22,19 @@ let {x, y} = state.game.player.location
 store.dispatch(setupGame({radius: 6, numOfEnemies: 4}))
 render()
 function render() {
-    animFrame = requestAnimationFrame(render);
+    // animFrame = requestAnimationFrame(render);
     cleanup()
     const state = store.getState()
     const playerLocation = state.game.player.location
 
-    x = lerp(x, playerLocation.x, 0.1)
-    y = lerp(y, playerLocation.y, 0.1)
+    // x = lerp(x, playerLocation.x, 0.1)
+    // y = lerp(y, playerLocation.y, 0.1)
 
     Map(ctx, state.game.map)
     state.game.enemies.forEach(enemy => {
         Enemy(ctx, point(enemy.location.x, enemy.location.y))
     })
-    Player(ctx, point(x, y))
+    Player(ctx, point(playerLocation.x, playerLocation.y))
 }
 
 store.subscribe(() => {

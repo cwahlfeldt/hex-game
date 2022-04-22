@@ -26,7 +26,7 @@ export function findPath(cameFrom, start, goal) {
     let path = []
     while (current !== start) {
         path.push(current)
-        current = cameFrom[current]
+        current = cameFrom[cameFrom.indexOf(current)]
     }
     return path
 }

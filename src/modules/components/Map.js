@@ -26,6 +26,26 @@ function drawHexagon(ctx, hex) {
     ctx.closePath()
 }
 
+function drawHexIndexes(ctx, hex) {
+    const {corners} = hex
+    ctx.moveTo(0, 0)
+    ctx.beginPath()
+    corners.forEach(corner => {
+        ctx.lineTo(corner.x, corner.y)
+    })
+    ctx.lineTo(corners[0].x, corners[0].y)
+    ctx.fillStyle = 'transparent'
+    ctx.fill()
+    ctx.closePath()
+
+    ctx.beginPath()
+    ctx.font = '12px sans-serif'
+    ctx.fillStyle = 'black'
+    ctx.fill()
+    ctx.fillText(hex.index, hex.screenCoords.x, hex.screenCoords.y)
+    ctx.closePath()
+}
+
 export default function Map(ctx, map) {
     map.forEach(hex => {
         drawHexagon(ctx, hex)
