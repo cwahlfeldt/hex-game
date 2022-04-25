@@ -49,36 +49,23 @@ export function hexShapedMap(radius) {
 export function tileMap(radius = 6) {
     const hexMap = randomizeTraversableHexes(
         hexShapedMap(radius),
-        4
-    )
+        radius * 3
+    ).filter(t => t.isTraversable)
     let map = []
     for (let i = 0; i < hexMap.length; i++) {
         const tile = hexMap[i]
         tile.index = i
         tile.neighborIndexes = tile.neighborIndexes
             .map(neighbor => hexMap.findIndex(hex => areHexagonsEqual(hex.cubeCoords, neighbor))).filter(nIndex => nIndex !== -1)
+
         map.push(tile)
     }
     return map
 }
 
-export function gridGraph(tileMap) {
-    let obj = {}
-    for (let i = 0; i < tileMap.length; i++) {
-        const cubeCoords = JSON.stringify(tileMap[i].cubeCoords)
-        Object.assign(obj, {[cubeCoords]: tileMap[i].neighborIndexes.map(n => tileMap[n].cubeCoords)})
-    }
-    return obj
-}
-
 export function mapGraph(tileMap = tileMap(6)) {
     return tileMap
         .map(tile => tile.neighborIndexes.filter(t => t !== -1))
-}
-
-export function mapGraphWithWeight(tileMap) {
-    return tileMap
-        .map(tile => tile.neighborIndexes.filter(t => t !== -1).map(nIndex => ({neighbor: nIndex, weight: tileMap[nIndex].weight})))
 }
 
 export function selectNearestHexTile(map, {x, y}) {

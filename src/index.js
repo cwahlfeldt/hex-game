@@ -1,7 +1,6 @@
 import store from "./modules/state/store.js"
-import {setupGame} from "./modules/state/slices/gameSlice.js";
 import {getMousePos} from "./modules/lib/canvasUtilites.js"
-import {movePlayer} from "./modules/state/slices/gameSlice.js";
+import {hoverPos, movePlayer, setupGame} from "./modules/state/slices/gameSlice.js";
 import {point} from "./modules/lib/hexagons.js";
 import {lerp} from "./modules/lib/utilities.js";
 import Map from './modules/components/Map.js'
@@ -12,36 +11,40 @@ const root = document.getElementById("game")
 const ctx = root.getContext("2d")
 let animFrame = null
 
-const myState = store.getState()
-let {x, y} = myState.game.player.location
+const state = store.getState()
+let {x, y} = state.game.player.location
 
-render(myState)
-function render(state) {
+store.dispatch(setupGame({radius: 6, numOfEnemies: 2}))
+render()
+function render() {
     cleanup()
-    animFrame = requestAnimationFrame(() => render(state));
+    const state = store.getState()
+    // animFrame = requestAnimationFrame(() => render());
     const playerLocation = state.game.player.location
 
-    x = lerp(x, playerLocation.x, 0.1)
-    y = lerp(y, playerLocation.y, 0.1)
+    // x = lerp(x, playerLocation.x, 0.1)
+    // y = lerp(y, playerLocation.y, 0.1)
 
     Map(ctx, state.game.map)
     state.game.enemies.forEach(enemy => {
         Enemy(ctx, point(enemy.location.x, enemy.location.y))
     })
-    Player(ctx, point(x, y))
+    Player(ctx, point(playerLocation.x, playerLocation.y))
 }
 
 store.subscribe(() => {
-    cancelAnimationFrame(animFrame)
-
-    const myStates = store.getState()
-    render(myStates)
+    // cancelAnimationFrame(animFrame)
+    render()
 })
-store.dispatch(setupGame({radius: 2, numOfEnemies: 2}))
 
 root.addEventListener('click', event => {
     const {x, y} = getMousePos(ctx, event)
     store.dispatch(movePlayer(point(x, y)))
+})
+
+root.addEventListener('mousemove', event => {
+    const {x, y} = getMousePos(ctx, event)
+    store.dispatch(hoverPos(point(x, y)))
 })
 
 function cleanup() {

@@ -56,11 +56,10 @@ const gameSlice = createSlice({
             const numOfEnemies = action.payload.numOfEnemies
             const map = tileMap(radius)
             const graph = mapGraph(map)
-            console.log(JSON.stringify(graph))
 
             const playerTile = indexOfTraversableTile(map)
             map[playerTile].occupants = 'player'
-            map[playerTile].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .9)')
+            // map[playerTile].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .9)')
             state.player.location = map[playerTile].screenCoords
             state.player.tileIndex = playerTile
 
@@ -89,52 +88,20 @@ const gameSlice = createSlice({
             const nearestTile = selectNearestHexTile(map, pos)
             const lastTurn = state.turns[state.turns.length - 1]
 
-            if (nearestTile === null || nearestTile.isTraversable === false) return
-
-            // console.log(state.player.tileIndex)
-            // console.log(state.player.tileIndex, nearestTile.index)
-            // const path = findPath(state.graph, start, end)
-            // const gridGraph = gridGraph(map)
-            // console.log(state.graph.path(map[start].cubeCoords, map[end].cubeCoords))
-
-            // let myGrid = Grid({hexSize: 30, type: 'flat', cols: '12', rows: '12'});
-            // Grid.map = map.map(hex => hex.screenCoords)
-            // let thePath = myGrid.pathTo(map[start].screenCoords, map[end].screenCoords);
-            // console.log(thePath)
-            // console.log(astar)
-            // var graphDiagonal = new astar.Graph(state.graph, { diagonal: true });
-            // var start = graphDiagonal.grid[0][0];
-            // var end = graphDiagonal.grid[1][2];
-            // var resultWithDiagonals = astar.search(graphDiagonal, start, end, { heuristic: astar.heuristics.diagonal });
-            // console.log(resultWithDiagonals)
-            // var matrix = state.graph;
-            // var grid = new PF.Grid(matrix);
-            // var finder = new PF.AStarFinder();
-            // var path = finder.findPath(start, start, end, end, grid);
-            // console.log(path)
-            // const path = findPath(state.graph, start, end)
-            // const path = reconstructPath(findPath(state.graph, start, end), start, end)
-            // // console.log(path)
-            // map[nearestTile].neighbors.forEach(tileIndex => {
-            //     map[tileIndex].color = 'black'
-            // })
-
-
+            if (nearestTile === null) return
 
             const start = state.player.tileIndex
             const end = nearestTile.index
             const search = searchPath(state.graph, start, end)
-            // const path = findPath(search, start, end)
+            const path = findPath(search, start, end)
 
             console.log('start: ', start)
             console.log('end: ', end)
             console.log('search: ', search)
-            // console.log('path: ', path)
-            // console.log(distanceBetweenHexagons(map[state.player.tileIndex].cubeCoords,map[nearestTile.index].cubeCoords))
-            // console.log(hexLine(start, end))
+            console.log('path: ', path)
 
-            map[lastTurn.lastTileIndex].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .5)')
-            map[nearestTile.index].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .9)')
+            // map[lastTurn.lastTileIndex].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .5)')
+            // map[nearestTile.index].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .9)')
             state.turns.push({
                 map: map,
                 lastTileIndex: nearestTile.index,
@@ -144,6 +111,24 @@ const gameSlice = createSlice({
 
             state.player.tileIndex = nearestTile.index
             state.player.location = nearestTile.screenCoords
+        },
+        hoverPos: (state, action) => {
+            const map = state.map
+            const pos = action.payload
+            const nearestTile = selectNearestHexTile(map, pos)
+
+            if (nearestTile === null) return
+
+            const start = state.player.tileIndex
+            const end = nearestTile.index
+            const search = searchPath(state.graph, start, end)
+            const path = findPath(search, start, end)
+            console.log(path)
+
+            map.forEach(t => t.color = 'rgba(42, 160, 216, .5)')
+            map[start].color = 'rgba(42, 160, 216, .9)'
+            path.forEach(tIndex => map[tIndex].color = 'rgba(42, 160, 216, .9)')
+            state.map = map
         }
     }
 })
@@ -163,6 +148,7 @@ function indexOfTraversableTile(map) {
 export const {
     setupGame,
     movePlayer,
+    hoverPos,
 } = gameSlice.actions
 
 export default gameSlice.reducer
