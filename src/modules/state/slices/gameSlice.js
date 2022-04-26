@@ -1,8 +1,3 @@
-import astar from 'javascript-astar'
-import {Grid} from 'hexagrid'
-import { defineGrid } from 'honeycomb-grid'
-
-// import {Grid,Engine} from "hexapi";
 import {createSlice, current} from '@reduxjs/toolkit'
 import {
     generateMapWithGraph, gridGraph,
@@ -12,16 +7,7 @@ import {
 } from "../../lib/map.js"
 import {addHexagons, distanceBetweenHexagons, hexagon, hexLine, point, subtractHexagons} from "../../lib/hexagons.js"
 import {deepEqual, randNum, roundCubeCoords} from "../../lib/utilities.js";
-import {
-    aStar,
-    breadthFirstSearch,
-    easyPath,
-    findPath,
-    path, reconstructedPath,
-    reconstructPath,
-    returnShortestPath, searchPath
-} from "../../lib/pathFinding.js";
-import PF from "pathfinding";
+import {findPath, searchPath} from "../../lib/pathFinding.js";
 
 const gameSlice = createSlice({
     name: 'game',

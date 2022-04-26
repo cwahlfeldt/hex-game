@@ -16,6 +16,7 @@
     "hexapi": "^1.0.4",
     "honeycomb-grid": "^3.1.8",
     "javascript-astar": "^0.4.1",
-    "pathfinding": "^0.4.18"
+    "pathfinding": "^0.4.18",
+    "three": "^0.139.2"
   }
 }

@@ -99,7 +99,7 @@ export function convertHexToPixel(hex) {
     const M = ORIENTATION
     const x = ((M.f0 * hex.q) + (M.f1 * hex.r)) * LAYOUT.size.x
     const y = ((M.f2 * hex.q) + (M.f3 * hex.r)) * LAYOUT.size.y
-    return point(x + LAYOUT.origin.x, y + LAYOUT.origin.y)
+    return point(Math.floor(x + LAYOUT.origin.x), Math.floor(y + LAYOUT.origin.y))
 }
 
 export function convertPixelToHex(pixelPoint) {
