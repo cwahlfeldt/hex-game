@@ -12,6 +12,7 @@
     "parcel": "^2.4.0"
   },
   "dependencies": {
+    "@manaflair/redux-batch": "^1.0.0",
     "hexagrid": "^2.1.1",
     "hexapi": "^1.0.4",
     "honeycomb-grid": "^3.1.8",

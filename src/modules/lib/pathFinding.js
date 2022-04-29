@@ -27,5 +27,5 @@ export function findPath(predecessorMap, start, goal) {
         path.push(current);
         current = predecessorMap[current];
     }
-    return path;
+    return path.reverse();
 }

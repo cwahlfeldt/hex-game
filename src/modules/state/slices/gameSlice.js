@@ -1,13 +1,8 @@
-import {createSlice, current} from '@reduxjs/toolkit'
-import {
-    generateMapWithGraph, gridGraph,
-    hexShapedMap, indexOfNearestTile, mapGraph,
-    selectNearestHexTile,
-    tile, tileMap
-} from "../../lib/map.js"
-import {addHexagons, distanceBetweenHexagons, hexagon, hexLine, point, subtractHexagons} from "../../lib/hexagons.js"
-import {deepEqual, randNum, roundCubeCoords} from "../../lib/utilities.js";
-import {findPath, searchPath} from "../../lib/pathFinding.js";
+import { createSlice, current } from '@reduxjs/toolkit'
+import { mapGraph, selectNearestHexTile, tile, tileMap } from "../../lib/map.js"
+import { hexagon, point } from "../../lib/hexagons.js"
+import { randNum, } from "../../lib/utilities.js";
+import { findPath, searchPath } from "../../lib/pathFinding.js";
 
 const gameSlice = createSlice({
     name: 'game',
@@ -49,9 +44,10 @@ const gameSlice = createSlice({
             state.player.location = map[playerTile].screenCoords
             state.player.tileIndex = playerTile
 
-            state.enemies = Array.from({length: numOfEnemies}, () => {
+            state.enemies = Array.from({ length: numOfEnemies }, () => {
                 const enemyTile = indexOfTraversableTile(map)
-                let enemy = {...state.enemyTypes.grunt}
+                let enemy = { ...state.enemyTypes.grunt }
+                enemy.tileIndex = enemyTile
                 enemy.location = map[enemyTile].screenCoords
                 map[enemyTile].occupants = 'enemy'
                 return enemy
@@ -74,20 +70,20 @@ const gameSlice = createSlice({
             const nearestTile = selectNearestHexTile(map, pos)
             const lastTurn = state.turns[state.turns.length - 1]
 
-            if (nearestTile === null) return
+            if (nearestTile === null || !nearestTile.isTraversable) return
 
             const start = state.player.tileIndex
             const end = nearestTile.index
             const search = searchPath(state.graph, start, end)
             const path = findPath(search, start, end)
 
-            console.log('start: ', start)
-            console.log('end: ', end)
-            console.log('search: ', search)
             console.log('path: ', path)
 
-            // map[lastTurn.lastTileIndex].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .5)')
-            // map[nearestTile.index].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .9)')
+            map[lastTurn.lastTileIndex].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .5)')
+            map[nearestTile.index].neighborIndexes.forEach(n => {
+                console.log('player neighbors: ', map[n].occupants)
+                map[n].color = 'rgba(42, 160, 216, .9)'
+            })
             state.turns.push({
                 map: map,
                 lastTileIndex: nearestTile.index,
@@ -95,9 +91,33 @@ const gameSlice = createSlice({
                 enemies: state.enemies
             })
 
-            state.player.tileIndex = nearestTile.index
-            state.player.location = nearestTile.screenCoords
+            const moveToTileIndex = path[0]
+            const moveTo = map[moveToTileIndex].screenCoords
+
+            state.map[nearestTile.index].occupants = 'player'
+            state.player.tileIndex = moveToTileIndex
+            state.player.location = moveTo
         },
+
+        moveEnemies: (state) => {
+            const map = state.map
+            const moveTo = state.player.tileIndex
+
+            state.enemies.forEach((enemy, i) => {
+                const start = enemy.tileIndex
+                const search = searchPath(state.graph, start, moveTo)
+                const enemyPath = findPath(search, start, moveTo)
+                // console.log('enemy path: ', enemyPath)
+                map[enemyPath[0]].neighborIndexes.forEach(n => {
+                    console.log(`enemy neighbors ${i}: `, map[n].occupants)
+
+                })
+                state.map[enemyPath[0]].occupants = 'enemy'
+                state.enemies[i].tileIndex = map[enemyPath[0]].index
+                state.enemies[i].location = map[enemyPath[0]].screenCoords
+            })
+        },
+
         hoverPos: (state, action) => {
             const map = state.map
             const pos = action.payload
@@ -134,6 +154,7 @@ function indexOfTraversableTile(map) {
 export const {
     setupGame,
     movePlayer,
+    moveEnemies,
     hoverPos,
 } = gameSlice.actions
 
