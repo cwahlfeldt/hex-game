@@ -121,7 +121,10 @@ export function convertPixelToHex(pixelPoint) {
 export function getCornerOffset(corner) {
     const size = LAYOUT.size
     const angle = 2.0 * PI * (ORIENTATION.startAngle + corner) / 6
-    return point(size.x * cos(angle), size.y * sin(angle))
+    return point(
+        Math.floor(size.x * cos(angle)),
+        Math.floor(size.y * sin(angle))
+    )
 }
 
 export function hexCorners(hex) {
@@ -129,7 +132,10 @@ export function hexCorners(hex) {
     const center = convertHexToPixel(hex)
     for (let i = 0; i < 6; i++) {
         const offset = getCornerOffset(i)
-        corners.push(point(center.x + offset.x, center.y + offset.y))
+        corners.push(point(
+            center.x + offset.x,
+            center.y + offset.y
+        ))
     }
     return corners
 }

@@ -99,9 +99,13 @@ const gameSlice = createSlice({
             state.player.location = moveTo
         },
 
-        moveEnemies: (state) => {
+        moveEnemies: (state, action) => {
             const map = state.map
+            const pos = action.payload
             const moveTo = state.player.tileIndex
+            const nearestTile = selectNearestHexTile(map, pos)
+
+            if (nearestTile === null || !nearestTile.isTraversable) return
 
             state.enemies.forEach((enemy, i) => {
                 const start = enemy.tileIndex

@@ -18,13 +18,11 @@ export function tile(
 ) {
     const hexTile = hexagon(hex.q, hex.r, hex.s)
     return {
-        index: 0,
         cubeCoords: hexTile,
         screenCoords: convertHexToPixel(hexTile),
         isTraversable: isTraversable,
         corners: hexCorners(hexTile),
         neighborIndexes: getAllNeighbors(hexTile),
-        weight: 1,
         occupants: 'none',
         color: 'rgba(42, 160, 216, .5)',
     }

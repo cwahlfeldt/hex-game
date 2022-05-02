@@ -1,9 +1,6 @@
 import * as THREE from 'three'
-import store from "./modules/state/store.js";
-import {hexagon, hexCorners} from "./modules/lib/hexagons.js";
-import {color} from "three/examples/jsm/nodes/ShaderNode.js";
-import {Vector2} from "three";
-import {setupGame} from "./modules/state/slices/gameSlice.js";
+import store from "./state/store.js";
+import {setupGame} from "./state/slices/gameSlice.js";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );

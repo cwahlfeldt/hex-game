@@ -19,7 +19,7 @@ import {
     hexLine,
     hexLerp,
 
-} from '../../modules/lib/hexagons.js'
+} from '../../lib/hexagons.js'
 
 const hexA = hexagon(0, 1, -1)
 const hexB = hexagon(-1, 0, 1)
@@ -101,7 +101,7 @@ test(`convert hexagons to pixels`, t => {
     )
     t.deepEqual(
         convertHexToPixel(hexD),
-        point(240, 138.56406460551017)
+        point(240, 138)
     )
 })
 
@@ -123,24 +123,24 @@ test(`convert pixels to hexagon`, t => {
 test(`get the corner offset of a hexagon`, t => {
     t.deepEqual(
         getCornerOffset(4),
-        point(-20.000000000000018, -34.64101615137754)
+        point(-21, -35)
     )
 })
 
-// test(`create hexagon corner points`, t => {
-//     const hex = hexagon(4, 0, -4)
-//     t.deepEqual(
-//         hexCorners(hex),
-//         [
-//             point(420, 207.84609690826525),
-//             point(390, 259.80762113533154),
-//             point(330, 259.8076211353316),
-//             point(300, 207.84609690826525),
-//             point(330, 155.88457268119896),
-//             point(390, 155.88457268119893),
-//         ]
-//     )
-// })
+test(`create hexagon corner points`, t => {
+    const hex = hexagon(4, 0, -4)
+    t.deepEqual(
+        hexCorners(hex),
+        [
+            point(280, 138),
+            point(260, 172),
+            point(220, 172),
+            point(200, 138),
+            point(219, 103),
+            point(260, 103),
+        ]
+    )
+})
 
 test(`get all hex neighbors`, t => {
     const hex = hexagon(6, -6, 0)
@@ -152,7 +152,7 @@ test(`get all hex neighbors`, t => {
             hexagon(7, -7, 0),
             hexagon(5, -5, 0),
             hexagon(6, -5, -1),
-            hexagon(5, -5, 0),
+            hexagon(7, -6, -1),
         ]
     )
 })

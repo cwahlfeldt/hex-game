@@ -5,8 +5,8 @@ import {
     getAllNeighbors,
     hexagon,
     hexCorners, point,
-} from "../../modules/lib/hexagons.js";
-import {getNearestHexTile, hexShapedMap, selectNearestHexTile, tile} from "../../modules/lib/map.js";
+} from "../../lib/hexagons.js";
+import {getNearestHexTile, hexShapedMap, selectNearestHexTile, tile} from "../../lib/map.js";
 
 const hexTile = hexagon(6, -5, -1)
 const expectedHexTile = {
@@ -14,7 +14,7 @@ const expectedHexTile = {
     screenCoords: convertHexToPixel(hexTile),
     isTraversable: true,
     corners: hexCorners(hexTile),
-    neighbors: getAllNeighbors(hexTile),
+    neighborIndexes: getAllNeighbors(hexTile),
     occupants: 'none',
     color: 'rgba(42, 160, 216, .5)',
 }
@@ -38,7 +38,7 @@ test(`create a hexagon tile`, t => {
 
 test(`get nearest hex tile`, t => {
     t.deepEqual(
-        getNearestHexTile(361, -139.56406460551014),
+        getNearestHexTile(361, -139),
         tile(hexTile),
     )
 })
@@ -46,7 +46,7 @@ test(`get nearest hex tile`, t => {
 test(`select nearest hex tile from map`, t => {
     const map = hexShapedMap(6)
     t.deepEqual(
-        selectNearestHexTile(map, point(361, -139.56406460551014)),
+        selectNearestHexTile(map, point(361, -139)),
         tile(hexTile),
     )
 })

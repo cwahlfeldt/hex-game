@@ -26,6 +26,7 @@ function drawHexIndexes(ctx, hex) {
     ctx.lineTo(corners[0].x, corners[0].y)
     ctx.fillStyle = 'black'
     ctx.font = '16px sans-serif';
+    ctx.textAlign = 'center'
     ctx.fillText(hex.index, hex.screenCoords.x, hex.screenCoords.y);
     ctx.closePath()
 }

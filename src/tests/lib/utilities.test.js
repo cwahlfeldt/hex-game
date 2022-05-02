@@ -1,5 +1,5 @@
 import test from 'ava'
-import {alphabeticalKeys, deepEqual} from '../../modules/lib/utilities.js'
+import {alphabeticalKeys, deepEqual} from '../../lib/utilities.js'
 
 test(`does deep equal util work`, t => {
     t.truthy(deepEqual({x: 1}, {x: 1}))
