@@ -1,5 +1,5 @@
 // maps are generated
-import {tile, hexShapedMap} from "../lib/map.js";
+import {tile, hexShapedMap} from "../lib/tileMap.js";
 import {hexagon} from "../lib/hexagons.js";
 
 const map = [

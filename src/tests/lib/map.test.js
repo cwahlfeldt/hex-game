@@ -1,52 +1,45 @@
 import test from 'ava'
+import {Hex} from "../../lib/map.js";
+import {DIRECTIONS, hexagon} from "../../lib/hexagons.js";
 
-import {
-    convertHexToPixel,
-    getAllNeighbors,
-    hexagon,
-    hexCorners, point,
-} from "../../lib/hexagons.js";
-import {getNearestHexTile, hexShapedMap, selectNearestHexTile, tile} from "../../lib/map.js";
-
-const hexTile = hexagon(6, -5, -1)
-const expectedHexTile = {
-    cubeCoords: hexTile,
-    screenCoords: convertHexToPixel(hexTile),
-    isTraversable: true,
-    corners: hexCorners(hexTile),
-    neighborIndexes: getAllNeighbors(hexTile),
-    occupants: 'none',
-    color: 'rgba(42, 160, 216, .5)',
-}
-
-test(`create a hexagon tile`, t => {
+test('can add hexagons', t => {
+    const hexA = hexagon(-1, 0, 1)
+    const hexB = hexagon(0, 1, -1)
     t.deepEqual(
-       tile(hexTile),
-       expectedHexTile
-    )
-
-    const hexTileWithDefaults = tile(hexTile)
-
-    t.deepEqual(
-        tile(hexTile, false),
-        {
-            ...hexTileWithDefaults,
-            isTraversable: false,
-        }
+        Hex(hexA)
+            .add(hexB)
+            .result(),
+        hexagon(-1, 1, 0)
     )
 })
 
-test(`get nearest hex tile`, t => {
+test('can subtract hexagons', t => {
+    const hexA = hexagon(-1, 0, 1)
+    const hexB = hexagon(0, 1, -1)
     t.deepEqual(
-        getNearestHexTile(361, -139),
-        tile(hexTile),
+        Hex(hexA)
+            .subtract(hexB)
+            .result(),
+        hexagon(-1, -1, 2)
     )
 })
 
-test(`select nearest hex tile from map`, t => {
-    const map = hexShapedMap(6)
+test('can multiply hexagons', t => {
+    const hexA = hexagon(-1, 0, 1)
     t.deepEqual(
-        selectNearestHexTile(map, point(361, -139)),
-        tile(hexTile),
+        Hex(hexA)
+            .multiply(2)
+            .result(),
+        hexagon(-2, 0, 2)
+    )
+})
+
+test('can find neighbor', t => {
+    const hexA = hexagon(-1, 0, 1)
+    t.deepEqual(
+        Hex(hexA)
+            .neighbor(DIRECTIONS.northWest)
+            .result(),
+        hexagon(-2, 0, 2)
     )
 })

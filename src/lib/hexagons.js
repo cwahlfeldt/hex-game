@@ -9,12 +9,12 @@ export const ORIENTATION = {
 }
 
 export const DIRECTIONS = {
-    upLeft:    hexagon(-1, 0, 1),
-    up:        hexagon(0, -1, 1),
-    upRight:   hexagon(1, -1, 0),
-    downLeft:  hexagon(-1, 1, 0),
-    down:      hexagon(0, 1, -1),
-    downRight: hexagon(1, 0, -1),
+    northWest:    hexagon(-1, 0, 1),
+    north:        hexagon(0, -1, 1),
+    northEast:   hexagon(1, -1, 0),
+    southWest:  hexagon(-1, 1, 0),
+    south:      hexagon(0, 1, -1),
+    southEast: hexagon(1, 0, -1),
 }
 
 export const SIZE = 40
@@ -167,12 +167,14 @@ export function hexLine(hexA, hexB) {
     return results
 }
 
-export function direction(coord1, coord2) {
-    if (coord1.q < coord2.q) {
-        return coord1.r > coord2.r ? DIRECTIONS.upLeft: DIRECTIONS.up;
-    } else if (coord1.q > coord2.q) {
-        return coord1.r < coord2.r ? DIRECTIONS.downRight : DIRECTIONS.down;
-    } else {
-        return coord1.r < coord2.r ? DIRECTIONS.upRight : DIRECTIONS.downLeft;
+export function hexShapedGrid(radius) {
+    let grid = []
+    for (let q = -radius; q <= radius; q++) {
+        const r1 = Math.max(-radius, -q - radius)
+        const r2 = Math.min(radius, -q + radius)
+        for (let r = r1; r <= r2; r++) {
+            grid.push(hexagon(q, r, -q - r))
+        }
     }
+    return grid
 }

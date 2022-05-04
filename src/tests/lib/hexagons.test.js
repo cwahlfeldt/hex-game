@@ -70,7 +70,7 @@ test(`get distance between 2 hexagons`, t => {
 
 test(`get hex neighbor`, t => {
     t.deepEqual(
-        hexagonNeighbor(hexA, DIRECTIONS.up),
+        hexagonNeighbor(hexA, DIRECTIONS.north),
         hexagon(0, 0, 0)
     )
 })

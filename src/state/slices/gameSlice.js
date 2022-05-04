@@ -1,5 +1,5 @@
 import { createSlice, current } from '@reduxjs/toolkit'
-import { mapGraph, selectNearestHexTile, tile, tileMap } from "../../lib/map.js"
+import { mapGraph, selectNearestHexTile, tile, tileMap } from "../../lib/tileMap.js"
 import { hexagon, point } from "../../lib/hexagons.js"
 import { randNum, } from "../../lib/utilities.js";
 import { findPath, searchPath } from "../../lib/pathFinding.js";
@@ -31,6 +31,7 @@ const gameSlice = createSlice({
         selectedHex: tile(hexagon(0, 0, 0)),
         turns: [],
     },
+
     reducers: {
         setupGame: (state, action) => {
             const radius = action.payload.radius
