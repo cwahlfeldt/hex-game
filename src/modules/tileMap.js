@@ -4,45 +4,15 @@ import {
     convertPixelToHex,
     getAllNeighbors,
     hexagon,
-    hexCorners,
+    hexCorners, hexShapedGrid,
     point
-} from "./hexagons.js";
-import {randNum} from "./utilities.js";
-
-const {min, max} = Math
-
-export function tile(
-    hex = hexagon(0, 0, 0),
-    isTraversable = true,
-) {
-    const hexTile = hexagon(hex.q, hex.r, hex.s)
-    return {
-        index: 0,
-        cubeCoords: hexTile,
-        screenCoords: convertHexToPixel(hexTile),
-        isTraversable: isTraversable,
-        corners: hexCorners(hexTile),
-        neighborIndexes: getAllNeighbors(hexTile),
-        occupants: 'none',
-        color: 'rgba(42, 160, 216, .5)',
-    }
-}
-
-export function hexShapedMap(radius) {
-    let map = []
-    for (let q = -radius; q <= radius; q++) {
-        let r1 = max(-radius, -q - radius);
-        let r2 = min(radius, -q + radius);
-        for (let r = r1; r <= r2; r++) {
-            map.push(hexagon(q, r, -q - r));
-        }
-    }
-    return map
-}
+} from "../lib/hexagons.js";
+import {randNum} from "../lib/utilities.js";
+import {tile} from "./tile.js";
 
 export function tileMap(radius = 6) {
     const hexMap = randomizeTraversableHexes(
-        hexShapedMap(radius).map(hex => tile(hex)),
+        hexShapedGrid(radius).map(hex => tile(hex)),
         radius * 3
     ).filter(t => t.isTraversable)
 
@@ -95,4 +65,16 @@ export function selectNearestHexTile(map, {x, y}) {
     const index = map.findIndex(item => areHexagonsEqual(item.cubeCoords, nearestHexTile.cubeCoords))
     if (index === -1) return null
     return map[index]
+}
+
+export function indexOfTraversableTile(map) {
+    let magicNum = randNum(0, map.length - 1)
+    let tile = map[magicNum]
+
+    while (!tile.isTraversable) {
+        const rando = randNum(0, map.length - 1)
+        tile = map[rando]
+        magicNum = rando
+    }
+    return magicNum
 }
