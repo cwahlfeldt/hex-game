@@ -1,8 +1,8 @@
 import { createSlice, current } from '@reduxjs/toolkit'
-import { mapGraph, selectNearestHexTile, tile, tileMap } from "../../lib/tileMap.js"
+import { mapGraph, selectNearestHexTile, tileMap, indexOfTraversableTile } from "../../modules/tileMap.js"
 import { hexagon, point } from "../../lib/hexagons.js"
-import { randNum, } from "../../lib/utilities.js";
 import { findPath, searchPath } from "../../lib/pathFinding.js";
+import { tile } from "../../modules/tile.js";
 
 const gameSlice = createSlice({
     name: 'game',
@@ -41,7 +41,7 @@ const gameSlice = createSlice({
 
             const playerTile = indexOfTraversableTile(map)
             map[playerTile].occupants = 'player'
-            // map[playerTile].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .9)')
+            map[playerTile].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .9)')
             state.player.location = map[playerTile].screenCoords
             state.player.tileIndex = playerTile
 
@@ -112,7 +112,6 @@ const gameSlice = createSlice({
                 const start = enemy.tileIndex
                 const search = searchPath(state.graph, start, moveTo)
                 const enemyPath = findPath(search, start, moveTo)
-                // console.log('enemy path: ', enemyPath)
                 map[enemyPath[0]].neighborIndexes.forEach(n => {
                     console.log(`enemy neighbors ${i}: `, map[n].occupants)
 
@@ -143,18 +142,6 @@ const gameSlice = createSlice({
         }
     }
 })
-
-function indexOfTraversableTile(map) {
-    let magicNum = randNum(0, map.length - 1)
-    let tile = map[magicNum]
-
-    while (!tile.isTraversable) {
-        const rando = randNum(0, map.length - 1)
-        tile = map[rando]
-        magicNum = rando
-    }
-    return magicNum
-}
 
 export const {
     setupGame,
