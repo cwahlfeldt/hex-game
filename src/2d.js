@@ -14,11 +14,9 @@ store.dispatch(setupGame({ radius: 6, numOfEnemies: 1 }))
 let initState = store.getState()
 let { x, y } = initState.game.player.location
 
-// let animFrame = null
 render()
 function render() {
     cleanup()
-    // animFrame = requestAnimationFrame(render);
 
     const state = store.getState()
     const end = state.game.player.location
@@ -32,7 +30,6 @@ function render() {
     })
 
     const pos = point(x, y)
-    // const pos = point(end.x, end.y)
     Player(ctx, pos)
 }
 
@@ -49,11 +46,6 @@ root.addEventListener('click', event => {
     ])
 })
 
-// root.addEventListener('mousemove', event => {
-//     const { x, y } = getMousePos(ctx, event)
-//     store.dispatch(hoverPos(point(x, y)))
-// })
-
 function cleanup() {
     root.width = window.innerWidth
     root.height = window.innerHeight
@@ -64,11 +56,11 @@ function cleanup() {
 
 async function animate(callback) {
     for (let i=0; i < 60 ; i++) {
-        await wait(5); // loop will be halted here until promise is resolved
+        await wait(5)
         callback()
     }
 }
 
 function wait(ms)  {
-    return new Promise( resolve => { setTimeout(resolve, ms); });
+    return new Promise( resolve => { setTimeout(resolve, ms) })
 }
