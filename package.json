@@ -2,22 +2,20 @@
   "type": "module",
   "scripts": {
     "start": "parcel www/index.html",
+    "test": "nyc ava ./src",
+    "watch-tests": "ava ./src/tests --watch",
     "build": "parcel build www/index.html --public-url ./",
     "deploy": "rm -rf ./dist && npm run build && gh-pages -d ./dist && rm -rf ./dist"
   },
   "devDependencies": {
+    "@manaflair/redux-batch": "^1.0.0",
     "@reduxjs/toolkit": "^1.8.1",
     "ava": "^4.1.0",
     "gh-pages": "^3.2.3",
+    "nyc": "^15.1.0",
     "parcel": "^2.4.0"
   },
   "dependencies": {
-    "@manaflair/redux-batch": "^1.0.0",
-    "hexagrid": "^2.1.1",
-    "hexapi": "^1.0.4",
-    "honeycomb-grid": "^3.1.8",
-    "javascript-astar": "^0.4.1",
-    "pathfinding": "^0.4.18",
-    "three": "^0.139.2"
+    "three": "^0.140.0"
   }
 }
