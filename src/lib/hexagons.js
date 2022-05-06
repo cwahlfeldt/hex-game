@@ -1,6 +1,6 @@
 import {roundCubeCoords, deepEqual, throwError, lerp} from './utilities.js'
 
-const {PI, sqrt, abs, cos, sin, max, round} = Math;
+const {PI, sqrt, abs, cos, max, sin, round} = Math;
 
 export const ORIENTATION = {
     f0: 3.0 / 2.0, f1: 0.0, f2: sqrt(3.0) / 2.0, f3: sqrt(3.0),
@@ -11,10 +11,10 @@ export const ORIENTATION = {
 export const DIRECTIONS = {
     northWest:    hexagon(-1, 0, 1),
     north:        hexagon(0, -1, 1),
-    northEast:   hexagon(1, -1, 0),
-    southWest:  hexagon(-1, 1, 0),
-    south:      hexagon(0, 1, -1),
-    southEast: hexagon(1, 0, -1),
+    northEast:    hexagon(1, -1, 0),
+    southWest:    hexagon(-1, 1, 0),
+    south:        hexagon(0, 1, -1),
+    southEast:    hexagon(1, 0, -1),
 }
 
 export const SIZE = 40
