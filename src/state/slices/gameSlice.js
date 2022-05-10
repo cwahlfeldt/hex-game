@@ -1,34 +1,20 @@
 import { createSlice, current } from '@reduxjs/toolkit'
-import { mapGraph, selectNearestHexTile, tileMap, indexOfTraversableTile } from "../../modules/tileMap.js"
+import { tileGraph, selectNearestHexTile, tileMap, indexOfTraversableTile } from "../../modules/tileMap.js"
 import { hexagon, point } from "../../lib/hexagons.js"
-import { findPath, searchPath } from "../../lib/pathFinding.js";
-import { tile } from "../../modules/tile.js";
+import { buildPath, searchPath } from "../../lib/pathFinding.js";
+import tile from "../../modules/tile.js";
+import player from "../../modules/player.js";
+import grunt from "../../modules/enemies/grunt.js";
 
 const gameSlice = createSlice({
     name: 'game',
 
     initialState: {
-        player: {
-            tileIndex: 0,
-            location: point(0, 0),
-            health: 3,
-            power: 100,
-            credits: 0
-        },
-        enemyTypes: {
-            grunt: {
-                tileIndex: 0,
-                location: point(0, 0),
-                health: 1,
-                drops: {
-                    credits: 10,
-                }
-            }
-        },
+        player: player(),
         enemies: [],
         map: [],
         graph: [],
-        selectedHex: tile(hexagon(0, 0, 0)),
+        selectedHex: tile(),
         turns: [],
     },
 
@@ -37,32 +23,27 @@ const gameSlice = createSlice({
             const radius = action.payload.radius
             const numOfEnemies = action.payload.numOfEnemies
             const map = tileMap(radius)
-            const graph = mapGraph(map)
-
+            const graph = tileGraph(map)
             const playerTile = indexOfTraversableTile(map)
+
             map[playerTile].occupants = 'player'
             map[playerTile].neighborIndexes.forEach(n => map[n].color = 'rgba(42, 160, 216, .9)')
+
             state.player.location = map[playerTile].screenCoords
             state.player.tileIndex = playerTile
 
             state.enemies = Array.from({ length: numOfEnemies }, () => {
                 const enemyTile = indexOfTraversableTile(map)
-                let enemy = { ...state.enemyTypes.grunt }
-                enemy.tileIndex = enemyTile
-                enemy.location = map[enemyTile].screenCoords
                 map[enemyTile].occupants = 'enemy'
-                return enemy
-            })
-
-            state.turns.push({
-                map: map,
-                lastTileIndex: playerTile,
-                player: state.player,
-                enemies: state.enemies
+                return grunt({
+                    mapIndex: enemyTile,
+                    location: map[enemyTile].screenCoords
+                })
             })
 
             state.map = map
             state.graph = graph
+            state.turns = [...state.turns, state]
         },
 
         movePlayer: (state, action) => {
@@ -76,7 +57,7 @@ const gameSlice = createSlice({
             const start = state.player.tileIndex
             const end = nearestTile.index
             const search = searchPath(state.graph, start, end)
-            const path = findPath(search, start, end)
+            const path = buildPath(search, start, end)
 
             console.log('path: ', path)
 
@@ -111,7 +92,7 @@ const gameSlice = createSlice({
             state.enemies.forEach((enemy, i) => {
                 const start = enemy.tileIndex
                 const search = searchPath(state.graph, start, moveTo)
-                const enemyPath = findPath(search, start, moveTo)
+                const enemyPath = buildPath(search, start, moveTo)
                 map[enemyPath[0]].neighborIndexes.forEach(n => {
                     console.log(`enemy neighbors ${i}: `, map[n].occupants)
 
@@ -132,7 +113,7 @@ const gameSlice = createSlice({
             const start = state.player.tileIndex
             const end = nearestTile.index
             const search = searchPath(state.graph, start, end)
-            const path = findPath(search, start, end)
+            const path = buildPath(search, start, end)
             console.log(path)
 
             map.forEach(t => t.color = 'rgba(42, 160, 216, .5)')

@@ -10,20 +10,25 @@ export function searchPath(graph, start, goal) {
 
         graph[current].forEach(next => {
             if (!(next in predecessorMap)) {
-                frontier.push(next);
-                predecessorMap[next] = current;
+                frontier.push(next)
+                predecessorMap[next] = current
             }
-        });
+        })
     }
-    return predecessorMap;
+    return predecessorMap
 }
 
-export function findPath(predecessorMap, start, goal) {
-    let current = goal;
-    let path = [];
+export function buildPath(predecessorMap, start, goal) {
+    let current = goal
+    let path = []
     while (current !== start) {
-        path.push(current);
-        current = predecessorMap[current];
+        path.push(current)
+        current = predecessorMap[current]
     }
-    return path.reverse();
+    return path.reverse()
+}
+
+export function findPath(graph, start, goal) {
+    const search = searchPath(graph, start, goal)
+    return buildPath(search, start, goal)
 }

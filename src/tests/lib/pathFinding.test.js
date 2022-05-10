@@ -1,5 +1,5 @@
 import test from "ava"
-import {findPath, searchPath} from "../../lib/pathFinding.js";
+import {buildPath, searchPath} from "../../lib/pathFinding.js";
 
 // simple 4x2 square grid
 // [
@@ -41,13 +41,13 @@ test('can search path', t => {
 test('can find path', t => {
     const searchA = searchPath(testGraphOfNeighbors, start, finish)
     t.deepEqual(
-        findPath(searchA, start, finish),
+        buildPath(searchA, start, finish),
         [1, 5, 6, 7]
     )
 
     const searchB = searchPath(testGraphOfNeighbors, 3, 5)
     t.deepEqual(
-        findPath(searchB, 3, 5),
+        buildPath(searchB, 3, 5),
         [2, 1, 5]
     )
 })

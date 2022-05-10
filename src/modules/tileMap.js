@@ -1,35 +1,32 @@
 import {
     areHexagonsEqual,
-    convertHexToPixel,
     convertPixelToHex,
-    getAllNeighbors,
-    hexagon,
-    hexCorners, hexShapedGrid,
+    hexShapedGrid,
     point
 } from "../lib/hexagons.js";
 import {randNum} from "../lib/utilities.js";
-import {tile} from "./tile.js";
+import tile from "./tile.js";
 
 export function tileMap(radius = 6) {
-    const hexMap = randomizeTraversableHexes(
-        hexShapedGrid(radius).map(hex => tile(hex)),
-        radius * 3
-    ).filter(t => t.isTraversable)
+    const tileFilledMap = hexShapedGrid(radius).map(hex => tile(hex))
+    const hexMap = randomizeTraversableHexes(tileFilledMap, radius * 3)
+        .filter(t => t.isTraversable)
 
     let map = []
     for (let i = 0; i < hexMap.length; i++) {
-        const tile = hexMap[i]
-        tile.index = i
-        tile.neighborIndexes = tile.neighborIndexes
-            .map(neighbor => hexMap.findIndex(hex => areHexagonsEqual(hex.cubeCoords, neighbor)))
-            .filter(nIndex => nIndex !== -1)
-
-        map.push(tile)
+        const tilePiece = hexMap[i]
+        map.push(tile(tilePiece.cubeCoords, {
+            index: i,
+        }))
     }
     return map
 }
 
-export function mapGraph(tileMap) {
+export function neighborTileIndexes(map, tile) {
+
+}
+
+export function tileGraph(tileMap) {
     return tileMap.map(tile => tile.neighborIndexes.filter(t => t !== -1))
 }
 

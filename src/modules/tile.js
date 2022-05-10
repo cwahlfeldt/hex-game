@@ -1,18 +1,18 @@
 import {convertHexToPixel, getAllNeighbors, hexagon, hexCorners} from "../lib/hexagons.js";
+import {colors} from "../lib/colors.js";
 
-export function tile(
-    hex = hexagon(0, 0, 0),
-    isTraversable = true,
-) {
-    const hexTile = hex
-    return {
+const tile = (hex = hexagon(0, 0, 0), options = {}) => {
+    const defaultOptions = {
         index: 0,
-        cubeCoords: hexTile,
-        screenCoords: convertHexToPixel(hexTile),
-        isTraversable: isTraversable,
-        corners: hexCorners(hexTile),
-        neighborIndexes: getAllNeighbors(hexTile),
+        cubeCoords: hex,
+        screenCoords: convertHexToPixel(hex),
+        isTraversable: true,
+        corners: hexCorners(hex),
+        neighborIndexes: getAllNeighbors(hex),
         occupants: 'none',
-        color: 'rgba(42, 160, 216, .5)',
+        color: colors.lightBlue,
     }
+    return {...defaultOptions, ...options}
 }
+
+export default tile

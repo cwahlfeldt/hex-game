@@ -4,7 +4,6 @@ export function getMousePos(ctx, event) {
     const x = event.clientX - rect.left
     const y = event.clientY - rect.top
 
-    // needed to account for `ctx.translate(root.width * 0.5, root.height * 0.5)`
     const transform = ctx.getTransform();
     const invMat = transform.invertSelf();
 
